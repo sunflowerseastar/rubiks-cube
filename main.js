@@ -8,8 +8,11 @@ import {
   WebGLRenderer,
 } from 'three';
 
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
+
 let camera, scene, renderer;
 let cube;
+let controls;
 
 console.log('asdf2');
 
@@ -25,14 +28,15 @@ function init() {
   );
   camera.position.z = 400;
 
+
   scene = new Scene();
 
   // const texture = new TextureLoader().load('textures/crate.gif');
 
-  const geometry = new BoxGeometry(200, 200, 200);
+  const cubeGeometry = new BoxGeometry(100, 100, 100);
   const material = new MeshBasicMaterial( { color: 0x333333 } );
 
-  mesh = new Mesh(geometry, material);
+  mesh = new Mesh(cubeGeometry, material);
   scene.add(mesh);
 
   renderer = new WebGLRenderer({ antialias: true });
@@ -40,7 +44,7 @@ function init() {
   renderer.setSize(window.innerWidth, window.innerHeight);
   document.body.appendChild(renderer.domElement);
 
-  //
+  controls = new OrbitControls( camera, renderer.domElement );
 
   window.addEventListener('resize', onWindowResize);
 }
@@ -55,8 +59,7 @@ function onWindowResize() {
 function animate() {
   requestAnimationFrame(animate);
 
-  mesh.rotation.x += 0.005;
-  mesh.rotation.y += 0.01;
-
   renderer.render(scene, camera);
+
+  controls.update();
 }
