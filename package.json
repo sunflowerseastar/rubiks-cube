@@ -1,0 +1,15 @@
+{
+  "name": "rubiks-cube",
+  "version": "0.0.9",
+  "main": "main.js",
+  "author": "Grant Surlyn <grant@sunflowerseastar.com>",
+  "license": "GPL-3.0",
+  "dependencies": {
+    "three": "^0.143.0"
+  },
+  "scripts": {
+    "build": "esbuild main.js --bundle --outfile=out.js",
+    "dev": "node dev.js",
+    "start": "node dev.js"
+  }
+}
