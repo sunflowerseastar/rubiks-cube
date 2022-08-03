@@ -23,10 +23,48 @@ const posCenter = 0;
 
 const leftCenterRight = [posLeft, posCenter, posRight];
 
-init();
-animate();
+const onKeypress = (e) => {
+  // console.log('onKeypress', e.keyCode);
+  if (e.keyCode === 70) {
+    console.log('F');
+  } else if (e.keyCode === 102) {
+    console.log('f');
+  } else if (e.keyCode === 117) {
+    console.log('u');
+  } else if (e.keyCode === 85) {
+    console.log('U');
+  } else if (e.keyCode === 100) {
+    console.log('d');
+  } else if (e.keyCode === 68) {
+    console.log('D');
+  } else if (e.keyCode === 98) {
+    console.log('b');
+  } else if (e.keyCode === 66) {
+    console.log('B');
+  } else if (e.keyCode === 108) {
+    console.log('l');
+  } else if (e.keyCode === 76) {
+    console.log('L');
+  } else if (e.keyCode === 114) {
+    console.log('r');
+  } else if (e.keyCode === 82) {
+    console.log('R');
+  }
+};
 
-function init() {
+const onWindowResize = () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+
+  renderer.setSize(window.innerWidth, window.innerHeight);
+};
+const animate = () => {
+  requestAnimationFrame(animate);
+  renderer.render(scene, camera);
+  controls.update();
+};
+
+const init = () => {
   camera = new PerspectiveCamera(
     70,
     window.innerWidth / window.innerHeight,
@@ -50,7 +88,6 @@ function init() {
     0xeeeeee, // white
     0xfaedb9, // yellow
   ];
-
   const color = new Color();
   let colors = [];
   for (let i = 0; i < positionAttribute.count; i += 6) {
@@ -65,7 +102,7 @@ function init() {
   }
   cubieGeometry.setAttribute('color', new Float32BufferAttribute(colors, 3));
 
-  // construct a doubly nested array with all cubie positions
+  // construct a doubly nested array `cubies` with all cubie positions
   let cubies = [];
   for (let i = 0; i < leftCenterRight.length; i += 1) {
     let layer = [];
@@ -105,19 +142,9 @@ function init() {
   controls = new OrbitControls(camera, renderer.domElement);
 
   window.addEventListener('resize', onWindowResize);
-}
 
-function onWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
+  window.addEventListener('keypress', onKeypress);
+};
 
-  renderer.setSize(window.innerWidth, window.innerHeight);
-}
-
-function animate() {
-  requestAnimationFrame(animate);
-
-  renderer.render(scene, camera);
-
-  controls.update();
-}
+init();
+animate();
