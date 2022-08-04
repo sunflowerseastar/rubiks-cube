@@ -10,6 +10,8 @@
   "scripts": {
     "build": "esbuild src/main.js --bundle --outfile=src/out.js",
     "dev": "node dev.js",
+    "prettier:check": "prettier --check '**/*.js'",
+    "prettier:write": "prettier --write '**/*.js'",
     "start": "node dev.js"
   }
 }

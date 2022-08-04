@@ -118,7 +118,7 @@ function init() {
 
   // controls
   controls = new OrbitControls(camera, renderer.domElement);
-  controls.addEventListener("change", render); // use if there is no animation loop
+  controls.addEventListener('change', render); // use if there is no animation loop
   controls.minDistance = 10;
   controls.maxDistance = 50;
 

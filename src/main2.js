@@ -78,7 +78,7 @@ function init() {
     1000
   );
   // camera.position.set(20, 20, 20);
-  camera.position.z = 900
+  camera.position.z = 900;
   controls = new OrbitControls(camera, renderer.domElement);
   controls.addEventListener('change', render);
   var light = new PointLight(0xffffff, 0.7);
