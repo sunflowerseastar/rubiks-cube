@@ -1,10 +1,13 @@
-import { createCamera } from './components/camera.js';
-import { createCubies } from './components/cubies.js';
-import { createScene } from './components/scene.js';
+import { AxesHelper } from "three";
 
-import { createRenderer } from './systems/renderer.js';
-import { Resizer } from './systems/Resizer.js';
-import { Loop } from './systems/Loop.js';
+import { createCamera } from "./components/camera.js";
+import { createCubies } from "./components/cubies.js";
+import { createScene } from "./components/scene.js";
+
+import { createRenderer } from "./systems/renderer.js";
+import { Resizer } from "./systems/Resizer.js";
+import { Loop } from "./Loop.js";
+import { indexOfClosestFaceCenterCubie } from "./utilities.js";
 
 let camera;
 let renderer;
@@ -16,8 +19,6 @@ class World {
     camera = createCamera();
     renderer = createRenderer();
     scene = createScene();
-    loop = new Loop(camera, scene, renderer);
-    container.append(renderer.domElement);
 
     const cubiesMeshes = createCubies();
     // console.log('cubiesMeshes', cubiesMeshes);
@@ -26,25 +27,38 @@ class World {
       scene.add(cubieMesh);
     });
 
+    loop = new Loop(camera, scene, renderer, cubiesMeshes);
+    container.append(renderer.domElement);
+
+    scene.add(new AxesHelper(500));
+
     const resizer = new Resizer(container, camera, renderer);
 
     const testKeypressSpaceFront = (e) => {
-      if (e.keyCode === 32 || e.keyCode === 102) {
-        // FRONT ROTATION
-        console.log('space or f, rotate front');
-
-        // user wants to rotate front
+      // 32 is 'SPC', 102 is 'f', 70 is 'F'
+      // console.log("e.keyCode", e.keyCode);
+      if (e.keyCode === 32 || e.keyCode === 102 || e.keyCode === 70) {
+        const centerCubieIndex = indexOfClosestFaceCenterCubie(
+          cubiesMeshes,
+          camera
+        );
 
         const userRotation = {
-          faceToRotate: 3, // TODO figure out A) type/data, and B) how to figure out which face
-          isClockwise: true,
+          centerCubieIndex,
+          isCounterClockwise: e.shiftKey, // as in, 'f' is forward, 'F' is backward
         };
 
-        // add 'f' to rotationQueue
         loop.addUserRotationToQueue(userRotation);
+
+        // DEV - use to 'start/stop' a rotation
+        // if (loop.userRotationQueue.length) {
+        //   loop.popUserRotationQueue();
+        // } else {
+        //   loop.addUserRotationToQueue(userRotation);
+        // }
       }
     };
-    window.addEventListener('keypress', testKeypressSpaceFront);
+    window.addEventListener("keypress", testKeypressSpaceFront);
   }
 
   render() {
