@@ -10,25 +10,6 @@ RotationPath.prototype.constructor = RotationPath;
 RotationPath.prototype.getPoint = function (t) {
   const radians = 2 * Math.PI * t;
 
-  // positive x
-  // return new Vector3(
-  //   this.radius,
-  //   this.radius * Math.sin(radians),
-  //   -this.radius * Math.cos(radians)
-  // );
-  // negative x
-  // return new Vector3(
-  //   -this.radius,
-  //   this.radius * Math.sin(radians),
-  //   this.radius * Math.cos(radians)
-  // );
-  // positive z
-  // return new Vector3(
-  //   this.radius * Math.cos(radians),
-  //   this.radius * Math.sin(radians),
-  //   this.radius
-  // )
-
   return this.xyz === "x"
     ? new Vector3(
         this.radius * this.sign,
@@ -37,10 +18,9 @@ RotationPath.prototype.getPoint = function (t) {
       )
     : this.xyz === "y"
     ? new Vector3(
-      // TODO y paths for top & bottom faces
-        this.radius * Math.cos(radians),
-        this.radius,
-        this.radius * Math.sin(radians)
+        this.radius * Math.cos(radians) * this.sign,
+        this.radius * this.sign,
+        -this.radius * Math.sin(radians)
       )
     : new Vector3(
         this.radius * Math.cos(radians) * this.sign,

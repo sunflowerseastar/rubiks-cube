@@ -59,18 +59,8 @@ let endingT;
 // based on which face it is
 let up;
 let rotationPath;
-let normalAxis;
-let normalSign;
 let iqr, iqt, iql, iqb;
 let mqr, mqt, mql, mqb;
-let faceRotations = {
-  4: 0,
-  10: 0,
-  12: 0,
-  14: 0,
-  16: 0,
-  22: 0,
-};
 
 // This is a generic Vector3 so 'axis' can be calculated in the animation loop
 // without having to create transient objects over and over.
@@ -132,16 +122,10 @@ class Loop {
             corners: cornerLocations,
             normal: { axis, sign },
           } = faceIndexToCubieLocationsLookup[centerCubieIndex];
-          normalAxis = axis;
-          normalSign = sign;
-          rotationPath = new RotationPath(
-            cubieSizePlusGapSize,
-            axis,
-            normalSign
-          );
-          console.log("rotationPath", rotationPath);
-          up = createUp(axis, normalSign);
-          console.log("up", up);
+          rotationPath = new RotationPath(cubieSizePlusGapSize, axis, sign);
+          // console.log("rotationPath", rotationPath);
+          up = createUp(axis, sign);
+          // console.log("up", up);
 
           rotCubieR = this.cubiesMeshes.find(
             (c) => c.location === edgeLocations[0]
@@ -196,11 +180,6 @@ class Loop {
               // do nothing, ignore the non-edges
             }
           });
-
-          faceRotations[centerCubieIndex] =
-            (isCounterClockwise
-              ? faceRotations[centerCubieIndex] + 1
-              : faceRotations[centerCubieIndex] - 1) % 4;
         } // END INIT
 
         t = isCounterClockwise ? (t += rotationSpeed) : (t -= rotationSpeed);

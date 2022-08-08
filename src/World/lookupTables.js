@@ -52,7 +52,15 @@ export const faceIndexToCubieLocationsLookup = {
       sign: -1,
     },
   },
-  10: dummyDuplicate, // bottom (green)
+  10: {
+    // bottom (green)
+    edges: [1, 9, 19, 11], // r  t  l  b
+    corners: [0, 18, 20, 2], // tr br bl tl
+    normal: {
+      axis: "y",
+      sign: -1,
+    },
+  },
   12: {
     // back (yellow)
     edges: [3, 15, 21, 9], // r  t  l  b
@@ -71,7 +79,15 @@ export const faceIndexToCubieLocationsLookup = {
       sign: 1,
     },
   },
-  16: dummyDuplicate, // top (blue)
+  16: {
+    // top (blue)
+    edges: [25, 15, 7, 17], // r  t  l  b
+    corners: [24, 6, 8, 26], // tr br bl tl
+    normal: {
+      axis: "y",
+      sign: 1,
+    },
+  },
   22: {
     // right (red)
     edges: [21, 25, 23, 19], // r  t  l  b
