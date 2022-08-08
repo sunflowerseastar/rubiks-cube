@@ -61,7 +61,16 @@ let up;
 let rotationPath;
 let normalAxis;
 let normalSign;
-let rq1, tq1, lq1, bq1;
+let iqr, iqt, iql, iqb;
+let mqr, mqt, mql, mqb;
+let faceRotations = {
+  4: 0,
+  10: 0,
+  12: 0,
+  14: 0,
+  16: 0,
+  22: 0,
+};
 
 // This is a generic Vector3 so 'axis' can be calculated in the animation loop
 // without having to create transient objects over and over.
@@ -137,20 +146,35 @@ class Loop {
           rotCubieR = this.cubiesMeshes.find(
             (c) => c.location === edgeLocations[0]
           );
-          rq1 = rotCubieR.quaternion.clone();
-          // console.log("rq1", rq1);
+          iqr = rotCubieR.quaternion.clone();
+          // console.log("iqr", iqr);
           rotCubieT = this.cubiesMeshes.find(
             (c) => c.location === edgeLocations[1]
           );
-          tq1 = rotCubieT.quaternion.clone();
+          iqt = rotCubieT.quaternion.clone();
           rotCubieL = this.cubiesMeshes.find(
             (c) => c.location === edgeLocations[2]
           );
-          lq1 = rotCubieL.quaternion.clone();
+          iql = rotCubieL.quaternion.clone();
           rotCubieB = this.cubiesMeshes.find(
             (c) => c.location === edgeLocations[3]
           );
-          bq1 = rotCubieB.quaternion.clone();
+          iqb = rotCubieB.quaternion.clone();
+
+          // one quarter turn per the 'up' of the currently rotating face
+          const currentFace90q = new Quaternion();
+          currentFace90q.setFromAxisAngle(up, MathUtils.degToRad(90));
+
+          // 'mq' means 'multiplied quaternion'. Essentially, take the current
+          // quaternion of a cubie and multiply it by a 90 degree rotation.
+          mqr = new Quaternion();
+          mqr.multiplyQuaternions(currentFace90q, iqr);
+          mqt = new Quaternion();
+          mqt.multiplyQuaternions(currentFace90q, iqt);
+          mql = new Quaternion();
+          mql.multiplyQuaternions(currentFace90q, iql);
+          mqb = new Quaternion();
+          mqb.multiplyQuaternions(currentFace90q, iqb);
 
           // 2. Rotate the system-cubies
 
@@ -167,12 +191,16 @@ class Loop {
               // console.log('edgeLocations', edgeLocations);
               // console.log("arrayIndex, newIndex", arrayIndex, newIndex);
               // console.log("c.cubieIndex, c.location, newLocation", c.cubieIndex, c.location, newLocation);
-              // console.log("c.location newLocation", c.location, newLocation);
               c.location = newLocation;
             } else {
               // do nothing, ignore the non-edges
             }
           });
+
+          faceRotations[centerCubieIndex] =
+            (isCounterClockwise
+              ? faceRotations[centerCubieIndex] + 1
+              : faceRotations[centerCubieIndex] - 1) % 4;
         } // END INIT
 
         t = isCounterClockwise ? (t += rotationSpeed) : (t -= rotationSpeed);
@@ -188,7 +216,6 @@ class Loop {
         }
 
         const pt = rotationPath.getPoint(t);
-        // console.log('t, pt', t, pt);
         rotCubieR.position.set(pt.x, pt.y, pt.z);
         const pt90 = rotationPath.getPoint(t + 0.25);
         rotCubieT.position.set(pt90.x, pt90.y, pt90.z);
@@ -197,36 +224,10 @@ class Loop {
         const pt270 = rotationPath.getPoint(t + 0.75);
         rotCubieB.position.set(pt270.x, pt270.y, pt270.z);
 
-        // rotCubieR.quaternion.setFromAxisAngle(up, angle).normalize();
-
-        // 'eq' means 'ending quaternion'
-        const eq = new Quaternion();
-        // eq.setFromAxisAngle(up, angle).normalize();
-        // this rotates "backward" (counter-clockwise)
-        eq.setFromAxisAngle(up, MathUtils.degToRad(90));
-        // this rotates forward (clockwise)
-        // eq.setFromAxisAngle(up, MathUtils.degToRad(-90));
-
-        // const sq = new Quaternion()
-        // sq.slerpQuaternions(rq1, eq, t * 4)
-        // console.log('sq', sq);
-        // rotCubieR.quaternion.copy(sq)
-        // rotCubieT.quaternion.copy(sq)
-        // rotCubieL.quaternion.copy(sq)
-        // rotCubieB.quaternion.copy(sq)
-
-        const mq = new Quaternion();
-        mq.multiplyQuaternions(rq1, eq);
-        // console.log('mq', mq);
-        // rotCubieR.quaternion.copy(mq)
-
-        const sq = new Quaternion();
-        sq.slerpQuaternions(rq1, mq, t * 4);
-        // console.log('sq', sq);
-        rotCubieR.quaternion.copy(sq.slerpQuaternions(rq1, mq, t * 4));
-        rotCubieT.quaternion.copy(sq.slerpQuaternions(tq1, mq, t * 4));
-        rotCubieL.quaternion.copy(sq.slerpQuaternions(lq1, mq, t * 4));
-        rotCubieB.quaternion.copy(sq.slerpQuaternions(bq1, mq, t * 4));
+        rotCubieR.quaternion.slerpQuaternions(iqr, mqr, t * 4);
+        rotCubieT.quaternion.slerpQuaternions(iqt, mqt, t * 4);
+        rotCubieL.quaternion.slerpQuaternions(iql, mql, t * 4);
+        rotCubieB.quaternion.slerpQuaternions(iqb, mqb, t * 4);
       } // END IS-ROTATING
 
       // OrbitControls
