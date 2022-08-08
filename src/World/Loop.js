@@ -61,6 +61,7 @@ let up;
 let rotationPath;
 let normalAxis;
 let normalSign;
+let rq1, tq1, lq1, bq1;
 
 // This is a generic Vector3 so 'axis' can be calculated in the animation loop
 // without having to create transient objects over and over.
@@ -131,19 +132,25 @@ class Loop {
           );
           console.log("rotationPath", rotationPath);
           up = createUp(axis, normalSign);
+          console.log("up", up);
 
           rotCubieR = this.cubiesMeshes.find(
             (c) => c.location === edgeLocations[0]
           );
+          rq1 = rotCubieR.quaternion.clone();
+          // console.log("rq1", rq1);
           rotCubieT = this.cubiesMeshes.find(
             (c) => c.location === edgeLocations[1]
           );
+          tq1 = rotCubieT.quaternion.clone();
           rotCubieL = this.cubiesMeshes.find(
             (c) => c.location === edgeLocations[2]
           );
+          lq1 = rotCubieL.quaternion.clone();
           rotCubieB = this.cubiesMeshes.find(
             (c) => c.location === edgeLocations[3]
           );
+          bq1 = rotCubieB.quaternion.clone();
 
           // 2. Rotate the system-cubies
 
@@ -190,24 +197,36 @@ class Loop {
         const pt270 = rotationPath.getPoint(t + 0.75);
         rotCubieB.position.set(pt270.x, pt270.y, pt270.z);
 
-        const tangent = rotationPath.getTangent(t).normalize();
-        // console.log('tangent', tangent);
+        // rotCubieR.quaternion.setFromAxisAngle(up, angle).normalize();
 
-        // const [axis1, axis2] = otherTwoAxes(normalAxis);
-        // console.log('axis1, axis2', axis1, axis2);
-        // const angle = Math.atan2(tangent[axis1], tangent[axis2]) + rotationOffset;
-        const angle = Math.atan2(tangent.y, tangent.x);
+        // 'eq' means 'ending quaternion'
+        const eq = new Quaternion();
+        // eq.setFromAxisAngle(up, angle).normalize();
+        // this rotates "backward" (counter-clockwise)
+        eq.setFromAxisAngle(up, MathUtils.degToRad(90));
+        // this rotates forward (clockwise)
+        // eq.setFromAxisAngle(up, MathUtils.degToRad(-90));
 
-        // const nq = new Quaternion();
-        // nq.setFromAxisAngle(up, MathUtils.degToRad(180));
+        // const sq = new Quaternion()
+        // sq.slerpQuaternions(rq1, eq, t * 4)
+        // console.log('sq', sq);
+        // rotCubieR.quaternion.copy(sq)
+        // rotCubieT.quaternion.copy(sq)
+        // rotCubieL.quaternion.copy(sq)
+        // rotCubieB.quaternion.copy(sq)
 
+        const mq = new Quaternion();
+        mq.multiplyQuaternions(rq1, eq);
+        // console.log('mq', mq);
+        // rotCubieR.quaternion.copy(mq)
 
-
-        rotCubieR.quaternion.setFromAxisAngle(up, angle).normalize();
-        // rotCubieT.quaternion.setFromAxisAngle(up, angle).normalize();
-        // rotCubieL.quaternion.setFromAxisAngle(up, angle).normalize();
-        // rotCubieB.quaternion.setFromAxisAngle(up, angle).normalize();
-
+        const sq = new Quaternion();
+        sq.slerpQuaternions(rq1, mq, t * 4);
+        // console.log('sq', sq);
+        rotCubieR.quaternion.copy(sq.slerpQuaternions(rq1, mq, t * 4));
+        rotCubieT.quaternion.copy(sq.slerpQuaternions(tq1, mq, t * 4));
+        rotCubieL.quaternion.copy(sq.slerpQuaternions(lq1, mq, t * 4));
+        rotCubieB.quaternion.copy(sq.slerpQuaternions(bq1, mq, t * 4));
       } // END IS-ROTATING
 
       // OrbitControls

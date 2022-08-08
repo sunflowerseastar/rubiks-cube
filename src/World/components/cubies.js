@@ -111,8 +111,8 @@ function createCubies() {
 
           cubie = new Mesh(altCubieGeometry, altMaterial);
         } else {
-          material.opacity = 0.1;
-          material.transparent = true;
+          // material.opacity = 0.1;
+          // material.transparent = true;
 
           cubie = new Mesh(cubieGeometry, material);
         }
