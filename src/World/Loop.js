@@ -55,12 +55,22 @@ let t;
 // 'endingT' is set at the init of each rotation to be 90 degrees ahead of t
 let endingT;
 
-// up, rotationPath, and normalAxis are recalculated on every rotation init
+// up, edgeRotationPath, and normalAxis are recalculated on every rotation init
 // based on which face it is
 let up;
-let rotationPath;
+let edgeRotationPath, cornerRotationPath;
+
+// |----+---+----|
+// | TL | T | TR |
+// |----+---+----|
+// |  L | C |  R |
+// |----+---+----|
+// | BL | B | BR |
+// |----+---+----|
 let iqc, iqr, iqt, iql, iqb;
+let iqtr, iqtl, iqbl, iqbr;
 let mqc, mqr, mqt, mql, mqb;
+let mqtr, mqtl, mqbl, mqbr;
 
 // This is a generic Vector3 so 'axis' can be calculated in the animation loop
 // without having to create transient objects over and over.
@@ -69,6 +79,7 @@ let v3 = new Vector3();
 let rotationFaceCornerCubies = [];
 
 let rotCubieC, rotCubieB, rotCubieL, rotCubieT, rotCubieR;
+let rotCubieTR, rotCubieTL, rotCubieBL, rotCubieBR;
 
 class Loop {
   constructor(camera, scene, renderer, cubiesMeshes) {
@@ -120,8 +131,17 @@ class Loop {
             corners: cornerLocations,
             normal: { axis, sign },
           } = faceIndexToCubieLocationsLookup[centerCubieIndex];
-          rotationPath = new RotationPath(cubieSizePlusGapSize, axis, sign);
-          // console.log("rotationPath", rotationPath);
+          edgeRotationPath = new RotationPath(cubieSizePlusGapSize, axis, sign);
+          const distCorner = Math.hypot(
+            cubieSizePlusGapSize,
+            cubieSizePlusGapSize
+          );
+          cornerRotationPath = new RotationPath(
+            distCorner,
+            axis,
+            sign,
+            cubieSizePlusGapSize
+          );
           up = createUp(axis, sign);
           // console.log("up", up);
 
@@ -146,6 +166,22 @@ class Loop {
             (c) => c.location === edgeLocations[3]
           );
           iqb = rotCubieB.quaternion.clone();
+          rotCubieTR = this.cubiesMeshes.find(
+            (c) => c.location === cornerLocations[0]
+          );
+          iqtr = rotCubieTR.quaternion.clone();
+          rotCubieTL = this.cubiesMeshes.find(
+            (c) => c.location === cornerLocations[1]
+          );
+          iqtl = rotCubieTL.quaternion.clone();
+          rotCubieBL = this.cubiesMeshes.find(
+            (c) => c.location === cornerLocations[2]
+          );
+          iqbl = rotCubieBL.quaternion.clone();
+          rotCubieBR = this.cubiesMeshes.find(
+            (c) => c.location === cornerLocations[3]
+          );
+          iqbr = rotCubieBR.quaternion.clone();
 
           // one quarter turn per the 'up' of the currently rotating face
           const currentFace90q = new Quaternion();
@@ -163,6 +199,14 @@ class Loop {
           mql.multiplyQuaternions(currentFace90q, iql);
           mqb = new Quaternion();
           mqb.multiplyQuaternions(currentFace90q, iqb);
+          mqtr = new Quaternion();
+          mqtr.multiplyQuaternions(currentFace90q, iqtr);
+          mqtl = new Quaternion();
+          mqtl.multiplyQuaternions(currentFace90q, iqtl);
+          mqbl = new Quaternion();
+          mqbl.multiplyQuaternions(currentFace90q, iqbl);
+          mqbr = new Quaternion();
+          mqbr.multiplyQuaternions(currentFace90q, iqbr);
 
           // 2. Rotate the system-cubies
 
@@ -176,8 +220,16 @@ class Loop {
                 edgeLocations.length;
               const newLocation = edgeLocations[newIndex];
               c.location = newLocation;
+            } else if (cornerLocations.includes(c.location)) {
+              const arrayIndex = cornerLocations.indexOf(c.location);
+              const newIndex =
+                (arrayIndex +
+                  (isCounterClockwise ? 1 : cornerLocations.length - 1)) %
+                cornerLocations.length;
+              const newLocation = cornerLocations[newIndex];
+              c.location = newLocation;
             } else {
-              // do nothing, ignore the non-edges
+              // do nothing, ignore other cubies
             }
           });
         } // END INIT
@@ -194,20 +246,34 @@ class Loop {
           isReadyToInitNewUserRotation = true;
         }
 
-        const pt = rotationPath.getPoint(t);
+        const pt = edgeRotationPath.getPoint(t);
         rotCubieR.position.set(pt.x, pt.y, pt.z);
-        const pt90 = rotationPath.getPoint(t + 0.25);
+        const pt90 = edgeRotationPath.getPoint(t + 0.25);
         rotCubieT.position.set(pt90.x, pt90.y, pt90.z);
-        const pt180 = rotationPath.getPoint(t + 0.5);
+        const pt180 = edgeRotationPath.getPoint(t + 0.5);
         rotCubieL.position.set(pt180.x, pt180.y, pt180.z);
-        const pt270 = rotationPath.getPoint(t + 0.75);
+        const pt270 = edgeRotationPath.getPoint(t + 0.75);
         rotCubieB.position.set(pt270.x, pt270.y, pt270.z);
+
+        const pt125 = cornerRotationPath.getPoint(t + 0.125);
+        rotCubieTR.position.set(pt125.x, pt125.y, pt125.z);
+        const pt375 = cornerRotationPath.getPoint(t + 0.375);
+        rotCubieTL.position.set(pt375.x, pt375.y, pt375.z);
+        const pt625 = cornerRotationPath.getPoint(t + 0.625);
+        rotCubieBL.position.set(pt625.x, pt625.y, pt625.z);
+        const pt875 = cornerRotationPath.getPoint(t + 0.875);
+        rotCubieBR.position.set(pt875.x, pt875.y, pt875.z);
 
         rotCubieC.quaternion.slerpQuaternions(iqc, mqc, t * 4).normalize();
         rotCubieR.quaternion.slerpQuaternions(iqr, mqr, t * 4).normalize();
         rotCubieT.quaternion.slerpQuaternions(iqt, mqt, t * 4).normalize();
         rotCubieL.quaternion.slerpQuaternions(iql, mql, t * 4).normalize();
         rotCubieB.quaternion.slerpQuaternions(iqb, mqb, t * 4).normalize();
+
+        rotCubieTR.quaternion.slerpQuaternions(iqtr, mqtr, t * 4).normalize();
+        rotCubieTL.quaternion.slerpQuaternions(iqtl, mqtl, t * 4).normalize();
+        rotCubieBL.quaternion.slerpQuaternions(iqbl, mqbl, t * 4).normalize();
+        rotCubieBR.quaternion.slerpQuaternions(iqbr, mqbr, t * 4).normalize();
       } // END IS-ROTATING
 
       // OrbitControls
