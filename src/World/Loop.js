@@ -87,13 +87,11 @@ class Loop {
     controls.dampingFactor = 0.3;
   }
 
-  addUserRotationToQueue(userRotation) {
-    // console.log("addUserRotationToQueue(userRotation)", userRotation);
+  userRotationQueueEnqueue(userRotation) {
     this.userRotationQueue.push(userRotation);
   }
-  popUserRotationQueue() {
-    // console.log("popUserRotationQueue()");
-    this.userRotationQueue.pop();
+  userRotationQueueDequeue() {
+    this.userRotationQueue = this.userRotationQueue.slice(1);
   }
 
   start() {
@@ -186,7 +184,7 @@ class Loop {
         ) {
           // console.log("FINAL ROTATION LOOP");
           t = endingT;
-          this.popUserRotationQueue();
+          this.userRotationQueueDequeue();
           isReadyToInitNewUserRotation = true;
         }
 

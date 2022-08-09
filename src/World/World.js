@@ -52,10 +52,10 @@ class World {
           centerCubieIndex: relativeRotationFace(e.key, centerCubieIndex),
         };
 
-        loop.addUserRotationToQueue(userRotation);
+        loop.userRotationQueueEnqueue(userRotation);
       } else if (e.keyCode === 32) {
         // spacebar for random rotation
-        loop.addUserRotationToQueue({
+        loop.userRotationQueueEnqueue({
           isCounterClockwise: Math.random() >= 0.5,
           centerCubieIndex: centerIndexes[Math.floor(Math.random() * 6)],
         });

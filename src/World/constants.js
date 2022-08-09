@@ -5,9 +5,10 @@ export const cubieSizePlusGapSize = cubieEdgeSize + gapSize;
 // export const rotationSpeed = 0.26;
 // export const rotationSpeed = 0.008;
 // export const rotationSpeed = 0.003;
+// export const rotationSpeed = 0.001;
 // export const rotationSpeed = 0.014;
-export const rotationSpeed = 0.02;
-// export const rotationSpeed = 0.026;
+// export const rotationSpeed = 0.02;
+export const rotationSpeed = 0.026;
 
 export const rotationKeys = [
   "f",
@@ -24,8 +25,7 @@ export const rotationKeys = [
   "D",
 ];
 
-export const centerIndexes = [10, 4, 14, 22, 16, 12] // d l f r u b
-
+export const centerIndexes = [10, 4, 14, 22, 16, 12]; // d l f r u b
 
 // 'face index' as in, rotation face, aka 'center cubie index'
 export const faceIndexToCubieLocationsLookup = {
