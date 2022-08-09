@@ -33,11 +33,11 @@ import {
   rotateForward,
   round25,
 } from "./utilities.js";
-import { faceIndexToCubieLocationsLookup } from "./lookupTables.js";
 import { RotationPath } from "./components/rotationPath.js";
 import {
   cubieEdgeSize,
   cubieSizePlusGapSize,
+  faceIndexToCubieLocationsLookup,
   gapSize,
   rotationSpeed,
 } from "./constants.js";
@@ -163,7 +163,6 @@ class Loop {
           // 2. Rotate the system-cubies
 
           // Update the rotated cubies' `location` property with their new locations
-          // console.log("edgeLocations", edgeLocations);
           this.cubiesMeshes.forEach((c) => {
             if (edgeLocations.includes(c.location)) {
               const arrayIndex = edgeLocations.indexOf(c.location);
@@ -172,9 +171,6 @@ class Loop {
                   (isCounterClockwise ? 1 : edgeLocations.length - 1)) %
                 edgeLocations.length;
               const newLocation = edgeLocations[newIndex];
-              // console.log('edgeLocations', edgeLocations);
-              // console.log("arrayIndex, newIndex", arrayIndex, newIndex);
-              // console.log("c.cubieIndex, c.location, newLocation", c.cubieIndex, c.location, newLocation);
               c.location = newLocation;
             } else {
               // do nothing, ignore the non-edges

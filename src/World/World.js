@@ -7,7 +7,8 @@ import { createScene } from "./components/scene.js";
 import { createRenderer } from "./systems/renderer.js";
 import { Resizer } from "./systems/Resizer.js";
 import { Loop } from "./Loop.js";
-import { indexOfClosestFaceCenterCubie } from "./utilities.js";
+import { indexOfClosestFaceCenterCubie, relativeRotationFace } from "./utilities.js";
+import { rotationKeys } from "./constants.js";
 
 let camera;
 let renderer;
@@ -34,31 +35,24 @@ class World {
 
     const resizer = new Resizer(container, camera, renderer);
 
-    const testKeypressSpaceFront = (e) => {
-      // 32 is 'SPC', 102 is 'f', 70 is 'F'
-      // console.log("e.keyCode", e.keyCode);
-      if (e.keyCode === 32 || e.keyCode === 102 || e.keyCode === 70) {
+    const onKeypress = (e) => {
+      if (rotationKeys.includes(e.key)) {
         const centerCubieIndex = indexOfClosestFaceCenterCubie(
           cubiesMeshes,
           camera
         );
 
         const userRotation = {
-          centerCubieIndex,
-          isCounterClockwise: e.shiftKey, // as in, 'f' is forward, 'F' is backward
+          // keyCodes below 97 are uppercase, and
+          // ex. 'f' is clockwise, 'F' is counter-clockwise
+          isCounterClockwise: e.keyCode < 97,
+          centerCubieIndex: relativeRotationFace(e.key, centerCubieIndex),
         };
 
         loop.addUserRotationToQueue(userRotation);
-
-        // DEV - use to 'start/stop' a rotation
-        // if (loop.userRotationQueue.length) {
-        //   loop.popUserRotationQueue();
-        // } else {
-        //   loop.addUserRotationToQueue(userRotation);
-        // }
       }
     };
-    window.addEventListener("keypress", testKeypressSpaceFront);
+    window.addEventListener("keypress", onKeypress);
   }
 
   render() {
