@@ -8,7 +8,8 @@ export const cubieSizePlusGapSize = cubieEdgeSize + gapSize;
 // export const rotationSpeed = 0.001;
 // export const rotationSpeed = 0.014;
 // export const rotationSpeed = 0.02;
-export const rotationSpeed = 0.026;
+// export const rotationSpeed = 0.026;
+export const rotationSpeed = 0.036;
 
 export const rotationKeys = [
   "f",

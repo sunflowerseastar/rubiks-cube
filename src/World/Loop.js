@@ -197,10 +197,10 @@ class Loop {
         const pt270 = rotationPath.getPoint(t + 0.75);
         rotCubieB.position.set(pt270.x, pt270.y, pt270.z);
 
-        rotCubieR.quaternion.slerpQuaternions(iqr, mqr, t * 4);
-        rotCubieT.quaternion.slerpQuaternions(iqt, mqt, t * 4);
-        rotCubieL.quaternion.slerpQuaternions(iql, mql, t * 4);
-        rotCubieB.quaternion.slerpQuaternions(iqb, mqb, t * 4);
+        rotCubieR.quaternion.slerpQuaternions(iqr, mqr, t * 4).normalize();
+        rotCubieT.quaternion.slerpQuaternions(iqt, mqt, t * 4).normalize();
+        rotCubieL.quaternion.slerpQuaternions(iql, mql, t * 4).normalize();
+        rotCubieB.quaternion.slerpQuaternions(iqb, mqb, t * 4).normalize();
       } // END IS-ROTATING
 
       // OrbitControls
