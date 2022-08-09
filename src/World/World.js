@@ -7,8 +7,11 @@ import { createScene } from "./components/scene.js";
 import { createRenderer } from "./systems/renderer.js";
 import { Resizer } from "./systems/Resizer.js";
 import { Loop } from "./Loop.js";
-import { indexOfClosestFaceCenterCubie, relativeRotationFace } from "./utilities.js";
-import { rotationKeys } from "./constants.js";
+import {
+  indexOfClosestFaceCenterCubie,
+  relativeRotationFace,
+} from "./utilities.js";
+import { centerIndexes, rotationKeys } from "./constants.js";
 
 let camera;
 let renderer;
@@ -50,6 +53,12 @@ class World {
         };
 
         loop.addUserRotationToQueue(userRotation);
+      } else if (e.keyCode === 32) {
+        // spacebar for random rotation
+        loop.addUserRotationToQueue({
+          isCounterClockwise: Math.random() >= 0.5,
+          centerCubieIndex: centerIndexes[Math.floor(Math.random() * 6)],
+        });
       }
     };
     window.addEventListener("keypress", onKeypress);

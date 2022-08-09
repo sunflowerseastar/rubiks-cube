@@ -24,6 +24,9 @@ export const rotationKeys = [
   "D",
 ];
 
+export const centerIndexes = [10, 4, 14, 22, 16, 12] // d l f r u b
+
+
 // 'face index' as in, rotation face, aka 'center cubie index'
 export const faceIndexToCubieLocationsLookup = {
   4: {
