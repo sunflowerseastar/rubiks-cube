@@ -1,5 +1,3 @@
-import { AxesHelper } from "three";
-
 import { createCamera } from "./components/camera.js";
 import { createCubies } from "./components/cubies.js";
 import { createScene } from "./components/scene.js";
@@ -33,8 +31,6 @@ class World {
 
     loop = new Loop(camera, scene, renderer, cubiesMeshes);
     container.append(renderer.domElement);
-
-    scene.add(new AxesHelper(500));
 
     const resizer = new Resizer(container, camera, renderer);
 

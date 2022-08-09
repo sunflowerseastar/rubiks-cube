@@ -26,13 +26,7 @@ import {
 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-import {
-  createUp,
-  otherTwoAxes,
-  rotateBackward,
-  rotateForward,
-  round25,
-} from "./utilities.js";
+import { createUp } from "./utilities.js";
 import { RotationPath } from "./components/rotationPath.js";
 import {
   cubieEdgeSize,
