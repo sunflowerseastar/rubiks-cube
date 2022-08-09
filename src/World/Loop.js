@@ -59,8 +59,8 @@ let endingT;
 // based on which face it is
 let up;
 let rotationPath;
-let iqr, iqt, iql, iqb;
-let mqr, mqt, mql, mqb;
+let iqc, iqr, iqt, iql, iqb;
+let mqc, mqr, mqt, mql, mqb;
 
 // This is a generic Vector3 so 'axis' can be calculated in the animation loop
 // without having to create transient objects over and over.
@@ -68,7 +68,7 @@ let v3 = new Vector3();
 
 let rotationFaceCornerCubies = [];
 
-let rotCubieB, rotCubieL, rotCubieT, rotCubieR;
+let rotCubieC, rotCubieB, rotCubieL, rotCubieT, rotCubieR;
 
 class Loop {
   constructor(camera, scene, renderer, cubiesMeshes) {
@@ -125,11 +125,15 @@ class Loop {
           up = createUp(axis, sign);
           // console.log("up", up);
 
+          // 'C' is 'Center'
+          rotCubieC = this.cubiesMeshes.find(
+            (c) => c.location === centerCubieIndex
+          );
+          iqc = rotCubieC.quaternion.clone();
           rotCubieR = this.cubiesMeshes.find(
             (c) => c.location === edgeLocations[0]
           );
           iqr = rotCubieR.quaternion.clone();
-          // console.log("iqr", iqr);
           rotCubieT = this.cubiesMeshes.find(
             (c) => c.location === edgeLocations[1]
           );
@@ -149,6 +153,8 @@ class Loop {
 
           // 'mq' means 'multiplied quaternion'. Essentially, take the current
           // quaternion of a cubie and multiply it by a 90 degree rotation.
+          mqc = new Quaternion();
+          mqc.multiplyQuaternions(currentFace90q, iqc);
           mqr = new Quaternion();
           mqr.multiplyQuaternions(currentFace90q, iqr);
           mqt = new Quaternion();
@@ -197,6 +203,7 @@ class Loop {
         const pt270 = rotationPath.getPoint(t + 0.75);
         rotCubieB.position.set(pt270.x, pt270.y, pt270.z);
 
+        rotCubieC.quaternion.slerpQuaternions(iqc, mqc, t * 4).normalize();
         rotCubieR.quaternion.slerpQuaternions(iqr, mqr, t * 4).normalize();
         rotCubieT.quaternion.slerpQuaternions(iqt, mqt, t * 4).normalize();
         rotCubieL.quaternion.slerpQuaternions(iql, mql, t * 4).normalize();
