@@ -5,7 +5,7 @@
   "author": "Grant Surlyn <grant@sunflowerseastar.com>",
   "license": "GPL-3.0",
   "dependencies": {
-    "three": "^0.143.0"
+    "three": "~0.143.0"
   },
   "scripts": {
     "build": "esbuild src/main.js --bundle --outfile=src/out.js",
