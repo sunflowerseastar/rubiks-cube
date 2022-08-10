@@ -1,7 +1,7 @@
 require("esbuild")
   .build({
     entryPoints: ["src/main.js"],
-    outfile: "src/out.js",
+    outfile: "public/out.js",
     bundle: true,
     watch: {
       onRebuild(error, result) {

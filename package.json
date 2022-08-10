@@ -1,14 +1,13 @@
 {
   "name": "rubiks-cube",
   "version": "0.0.9",
-  "main": "main.js",
   "author": "Grant Surlyn <grant@sunflowerseastar.com>",
   "license": "GPL-3.0",
   "dependencies": {
     "three": "~0.143.0"
   },
   "scripts": {
-    "build": "esbuild src/main.js --bundle --outfile=src/out.js",
+    "build": "esbuild src/main.js --bundle --outfile=public/out.js",
     "dev": "node dev.js",
     "prettier:check": "prettier --check '**/*.js'",
     "prettier:write": "prettier --write '**/*.js'",
