@@ -1,0 +1,25 @@
+body {
+  margin: 0;
+  font-family: sans-serif;
+}
+#wrapper {
+  border: 3px solid red !important;
+  position: relative;
+
+}
+#scene-container {
+}
+h1 {
+  font-size: 100px;
+}
+#controls {
+  color: yellow;
+  border: 3px solid orange !important;
+  z-index: 999;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 300px;
+
+}

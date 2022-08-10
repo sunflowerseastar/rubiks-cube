@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html>
-	<head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-		<meta charset="utf-8">
-		<title>rubiks cube</title>
-		<style>
-		 body { margin: 0; }
-		</style>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="utf-8" />
+    <title>rubiks cube</title>
     <script type="module" src="./out.js"></script>
-	</head>
-	<body>
+    <link href="style.css" rel="stylesheet" />
+  </head>
+  <body>
     <div id="scene-container"></div>
-	</body>
+    <div id="controls">
+      <a tabindex="0" role="button" id="F" class="rotate-btn">
+        <span>F</span>
+      </a>
+      <a tabindex="0" role="button" id="f" class="rotate-btn">
+        <span>f</span>
+      </a>
+    </div>
+  </body>
 </html>
