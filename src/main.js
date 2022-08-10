@@ -1,9 +1,9 @@
-import { World } from "./World/World.js";
+import { Cube } from "./Cube/Cube.js";
 
 function main() {
   const container = document.querySelector("#scene-container");
-  const world = new World(container);
-  world.start();
+  const cube = new Cube(container);
+  cube.start();
 }
 
 main();

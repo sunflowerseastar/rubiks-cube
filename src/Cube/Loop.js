@@ -277,9 +277,6 @@ class Loop {
       this.renderer.render(this.scene, this.camera);
     });
   }
-  stop() {
-    this.renderer.setAnimationLoop(null);
-  }
 }
 
 export { Loop };

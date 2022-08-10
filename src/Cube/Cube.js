@@ -16,7 +16,7 @@ let renderer;
 let scene;
 let loop;
 
-class World {
+class Cube {
   constructor(container) {
     camera = createCamera();
     renderer = createRenderer();
@@ -66,9 +66,6 @@ class World {
   start() {
     loop.start();
   }
-  stop() {
-    loop.stop();
-  }
 }
 
-export { World };
+export { Cube };
