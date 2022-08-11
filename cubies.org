@@ -1,0 +1,134 @@
+* locations
+
+back / yellow:
+
+#+begin_src
+|----+----+---|
+| 24 | 15 | 6 |
+|----+----+---|
+| 21 | 12 | 3 |
+|----+----+---|
+| 18 |  9 | 0 |
+|----+----+---|
+#+end_src
+
+front / white:
+
+#+begin_src
+|---+----+----|
+| 8 | 17 | 26 |
+|---+----+----|
+| 5 | 14 | 23 |
+|---+----+----|
+| 2 | 11 | 20 |
+|---+----+----|
+#+end_src
+
+right / red:
+
+#+begin_src
+|----+----+----|
+| 26 | 25 | 24 |
+|----+----+----|
+| 23 | 22 | 21 |
+|----+----+----|
+| 20 | 19 | 18 |
+|----+----+----|
+#+end_src
+
+left / orange:
+
+#+begin_src
+|---+---+---|
+| 6 | 7 | 8 |
+|---+---+---|
+| 3 | 4 | 5 |
+|---+---+---|
+| 0 | 1 | 2 |
+|---+---+---|
+#+end_src
+
+top / blue:
+
+#+begin_src
+- y -
+|---+----+----|
+| 6 | 15 | 24 |
+|---+----+----|
+| 7 | 16 | 25 |
+|---+----+----|
+| 8 | 17 | 26 |
+|---+----+----|
+- w -
+#+end_src
+
+bottom / green:
+
+#+begin_src
+- y -
+|----+----+---|
+| 18 |  9 | 0 |
+|----+----+---|
+| 19 | 10 | 1 |
+|----+----+---|
+| 20 | 11 | 2 |
+|----+----+---|
+- w -
+- w -
+|---+----+----|
+| 2 | 11 | 20 |
+|---+----+----|
+| 1 | 10 | 19 |
+|---+----+----|
+| 0 |  9 | 18 |
+|---+----+----|
+- y -
+#+end_src
+
+* Shorthand generic locations
+
+rotCubieX, where X is:
+
+#+begin_src
+|----+---+----|
+| TL | T | TR |
+|----+---+----|
+|  L | C |  R |
+|----+---+----|
+| BL | B | BR |
+|----+---+----|
+#+end_src
+
+* Locations by index
+
+#+begin_src js
+centerCubieIndexes = [4, 10, 12, 14, 16, 22];
+
+cubiesMeshes[0];  // back - bottom right
+cubiesMeshes[1];  // left - bottom middle
+cubiesMeshes[2];  // front - bottom left
+cubiesMeshes[3];  // back - right middle
+cubiesMeshes[4];  // left - center
+cubiesMeshes[5];  // front - left middle
+cubiesMeshes[6];  // back - top right
+cubiesMeshes[7];  // left - top middle
+cubiesMeshes[8];  // front - top left
+cubiesMeshes[9];  // back - bottom middle
+cubiesMeshes[10]; // down (bottom) - center
+cubiesMeshes[11]; // front - bottom middle
+cubiesMeshes[12]; // back - center
+cubiesMeshes[13]; // inner center of cube
+cubiesMeshes[14]; // front - center
+cubiesMeshes[15]; // back - top middle
+cubiesMeshes[16]; // up (top) - center
+cubiesMeshes[17]; // front - top middle
+cubiesMeshes[18]; // back - bottom left
+cubiesMeshes[19]; // right - bottom middle
+cubiesMeshes[20]; // front - bottom right
+cubiesMeshes[21]; // back - left middle
+cubiesMeshes[22]; // right - center
+cubiesMeshes[23]; // front - right middle
+cubiesMeshes[24]; // back - top left
+cubiesMeshes[25]; // right - top middle
+cubiesMeshes[26]; // front - top right
+#+end_src

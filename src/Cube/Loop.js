@@ -15,6 +15,13 @@
  * counter-clockwise. The logic inside the loop figures out which cubies those
  * are, animates them until the rotation is completed, then pops the rotation off
  * the queue.
+ *
+ * | Variable  | What it is                                 | Examples              |
+ * |-----------+--------------------------------------------+-----------------------|
+ * | rotCubie  | the three.js cubie                         | rotCubieL, rotCubieTR |
+ * | iq        | initial quaternion (pre-rotation)          | iql, iqtr             |
+ * | mq        | multiplied quaternion (end goal)           | mql, mqtr             |
+ * | pt        | xyz point on a given rotation path per /t/ | pt90                  |
  */
 import {
   Curve,
