@@ -43,10 +43,7 @@ import {
   rotationSpeed,
 } from "./constants.js";
 
-// state (mutables)
-
 let controls;
-
 let centerCubieIndex;
 let isCounterClockwise;
 let isReadyToInitNewUserRotation = true;
@@ -56,8 +53,8 @@ let t;
 // 'endingT' is set at the init of each rotation to be 90 degrees ahead of t
 let endingT;
 
-// up, edgeRotationPath, and normalAxis are recalculated on every rotation init
-// based on which face it is
+// 'up' and the rotation paths are recalculated on every rotation init based on
+// which face it is
 let up;
 let edgeRotationPath, cornerRotationPath;
 
@@ -68,17 +65,17 @@ let edgeRotationPath, cornerRotationPath;
 // |----+---+----|
 // | BL | B | BR |
 // |----+---+----|
+
+// | Variable | What it is                        | Examples                  |
+// |----------+-----------------------------------+---------------------------|
+// | rotCubie | the three.js cubie to be rotated  | ~rotCubieL~, ~rotCubieTR~ |
+// | iq       | initial quaternion (pre-rotation) | ~iql~, ~iqtr~             |
+// | mq       | multiplied quaternion (end goal)  | ~mql~, ~mqtr~             |
+
 let iqc, iqr, iqt, iql, iqb;
 let iqtr, iqtl, iqbl, iqbr;
 let mqc, mqr, mqt, mql, mqb;
 let mqtr, mqtl, mqbl, mqbr;
-
-// This is a generic Vector3 so 'axis' can be calculated in the animation loop
-// without having to create transient objects over and over.
-let v3 = new Vector3();
-
-let rotationFaceCornerCubies = [];
-
 let rotCubieC, rotCubieB, rotCubieL, rotCubieT, rotCubieR;
 let rotCubieTR, rotCubieTL, rotCubieBL, rotCubieBR;
 
@@ -88,7 +85,6 @@ class Loop {
     this.scene = scene;
     this.renderer = renderer;
     this.cubiesMeshes = cubiesMeshes;
-    this.updatables = [];
 
     // this is the queue that holds the rotations that the user has initiated
     // with keypresses in World.js
@@ -113,7 +109,6 @@ class Loop {
 
         if (isReadyToInitNewUserRotation) {
           // BEGIN INIT
-          // console.log("init new rotation", this.userRotationQueue[0]);
 
           const { centerCubieIndex: cci, isCounterClockwise: icc } =
             this.userRotationQueue[0];
@@ -144,9 +139,7 @@ class Loop {
             cubieSizePlusGapSize
           );
           up = createUp(axis, sign);
-          // console.log("up", up);
 
-          // 'C' is 'Center'
           rotCubieC = this.cubiesMeshes.find(
             (c) => c.location === centerCubieIndex
           );
@@ -209,9 +202,7 @@ class Loop {
           mqbr = new Quaternion();
           mqbr.multiplyQuaternions(currentFace90q, iqbr);
 
-          // 2. Rotate the system-cubies
-
-          // Update the rotated cubies' `location` property with their new locations
+          // 2. Update the rotated cubies' `location` property with their new locations
           this.cubiesMeshes.forEach((c) => {
             if (edgeLocations.includes(c.location)) {
               const arrayIndex = edgeLocations.indexOf(c.location);
@@ -241,7 +232,7 @@ class Loop {
           (isCounterClockwise && t >= endingT) ||
           (!isCounterClockwise && t <= endingT)
         ) {
-          // console.log("FINAL ROTATION LOOP");
+          // FINAL ROTATION LOOP
           t = endingT;
           this.userRotationQueueDequeue();
           isReadyToInitNewUserRotation = true;

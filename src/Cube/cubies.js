@@ -70,7 +70,6 @@ function createCubies() {
           z: lcr[k],
           cubieIndex,
           isCenterCubie: centerCubieIndexes.includes(cubieIndex),
-          isInnerCenterCubie: cubieIndex === innerCenterCubieIndex,
         });
         cubieIndex += 1;
       }
@@ -93,6 +92,7 @@ function createCubies() {
         );
 
         if (cubieIndex2 === 23) {
+          // DEV - highlight a specific cubie
           // let altColors = [];
           // for (let i = 0; i < positionAttribute.count; i += 6) {
           //   const randomColor = 0xffffff * Math.random();
@@ -111,6 +111,7 @@ function createCubies() {
 
           cubie = new Mesh(altCubieGeometry, altMaterial);
         } else {
+          // DEV - dim all other cubies
           // material.opacity = 0.1;
           // material.transparent = true;
 
@@ -120,13 +121,10 @@ function createCubies() {
         cubie.position.y = cubies[i][j][k].y;
         cubie.position.z = cubies[i][j][k].z;
         cubie.isCenterCubie = cubies[i][j][k].isCenterCubie;
-        cubie.isInnerCenterCubie = cubies[i][j][k].isInnerCenterCubie;
         // cubieIndex is the original location, and never changes
         cubie.cubieIndex = cubies[i][j][k].cubieIndex;
         // location is mutated over time, and represents where the cubie is now
         cubie.location = cubies[i][j][k].cubieIndex;
-        cubie.previousQuaternion = cubies[i][j][k].quaternion;
-        cubie.test = 1;
 
         cubiesMeshes.push(cubie);
 
