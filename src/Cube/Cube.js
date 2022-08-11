@@ -1,9 +1,9 @@
-import { createCamera } from "./components/camera.js";
-import { createCubies } from "./components/cubies.js";
-import { createScene } from "./components/scene.js";
+import { createCamera } from "./threejs-helpers/camera.js";
+import { createCubies } from "./cubies.js";
+import { createScene } from "./threejs-helpers/scene.js";
 
-import { createRenderer } from "./systems/renderer.js";
-import { Resizer } from "./systems/Resizer.js";
+import { createRenderer } from "./threejs-helpers/renderer.js";
+import { Resizer } from "./threejs-helpers/Resizer.js";
 import { Loop } from "./Loop.js";
 import {
   indexOfClosestFaceCenterCubie,

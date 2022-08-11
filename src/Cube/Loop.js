@@ -27,7 +27,7 @@ import {
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 import { createUp } from "./utilities.js";
-import { RotationPath } from "./components/rotationPath.js";
+import { RotationPath } from "./rotationPath.js";
 import {
   cubieEdgeSize,
   cubieSizePlusGapSize,

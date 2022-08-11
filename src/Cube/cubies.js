@@ -7,7 +7,7 @@ import {
   MeshBasicMaterial,
 } from "three";
 
-import { cubieEdgeSize, gapSize } from "../constants.js";
+import { cubieEdgeSize, gapSize } from "./constants.js";
 
 const posLeft = (cubieEdgeSize + gapSize) * -1;
 const posRight = cubieEdgeSize + gapSize;
