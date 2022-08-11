@@ -15,6 +15,7 @@ let camera;
 let renderer;
 let scene;
 let loop;
+let cubiesMeshes;
 
 class Cube {
   constructor(container) {
@@ -22,9 +23,7 @@ class Cube {
     renderer = createRenderer();
     scene = createScene();
 
-    const cubiesMeshes = createCubies();
-    // console.log('cubiesMeshes', cubiesMeshes);
-
+    cubiesMeshes = createCubies();
     cubiesMeshes.forEach((cubieMesh) => {
       scene.add(cubieMesh);
     });
@@ -33,52 +32,28 @@ class Cube {
     container.append(renderer.domElement);
 
     const resizer = new Resizer(container, camera, renderer);
+  }
 
-    const rotate = (face) => {
-      const centerCubieIndex = indexOfClosestFaceCenterCubie(
-        cubiesMeshes,
-        camera
-      );
-
-      const userRotation = {
-        // ex. 'f' is clockwise, 'F' is counter-clockwise
-        isCounterClockwise: face.toUpperCase() === face,
-        centerCubieIndex: relativeRotationFace(face, centerCubieIndex),
-      };
-
-      loop.userRotationQueueEnqueue(userRotation);
-    };
-
-    const rotateRandom = () =>
-      loop.userRotationQueueEnqueue({
-        isCounterClockwise: Math.random() >= 0.5,
-        centerCubieIndex: centerIndexes[Math.floor(Math.random() * 6)],
-      });
-
-    const onKeypress = (e) => {
-      if (rotationKeys.includes(e.key)) {
-        rotate(e.key);
-      } else if (e.keyCode === 32) {
-        // spacebar for random rotation
-        rotateRandom();
-      }
-    };
-    window.addEventListener("keypress", onKeypress);
-
-    document.getElementById("scramble").addEventListener("click", () => {
-      for (let i = 0; i < 25; i++) {
-        rotateRandom();
-      }
-    });
-    document.getElementById("random").addEventListener("click", rotateRandom);
-    [...document.querySelectorAll(".rotate-btn")].forEach((el) =>
-      el.addEventListener("click", () => rotate(el.id))
+  rotate(face) {
+    const centerCubieIndex = indexOfClosestFaceCenterCubie(
+      cubiesMeshes,
+      camera
     );
+    const userRotation = {
+      // ex. 'f' is clockwise, 'F' is counter-clockwise
+      isCounterClockwise: face.toUpperCase() === face,
+      centerCubieIndex: relativeRotationFace(face, centerCubieIndex),
+    };
+    loop.userRotationQueueEnqueue(userRotation);
   }
 
-  render() {
-    renderer.render(scene, camera);
+  rotateRandom() {
+    loop.userRotationQueueEnqueue({
+      isCounterClockwise: Math.random() >= 0.5,
+      centerCubieIndex: centerIndexes[Math.floor(Math.random() * 6)],
+    });
   }
+
   start() {
     loop.start();
   }
