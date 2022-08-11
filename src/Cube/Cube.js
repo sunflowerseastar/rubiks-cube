@@ -34,30 +34,46 @@ class Cube {
 
     const resizer = new Resizer(container, camera, renderer);
 
+    const rotate = (face) => {
+      const centerCubieIndex = indexOfClosestFaceCenterCubie(
+        cubiesMeshes,
+        camera
+      );
+
+      const userRotation = {
+        // ex. 'f' is clockwise, 'F' is counter-clockwise
+        isCounterClockwise: face.toUpperCase() === face,
+        centerCubieIndex: relativeRotationFace(face, centerCubieIndex),
+      };
+
+      loop.userRotationQueueEnqueue(userRotation);
+    };
+
+    const rotateRandom = () =>
+      loop.userRotationQueueEnqueue({
+        isCounterClockwise: Math.random() >= 0.5,
+        centerCubieIndex: centerIndexes[Math.floor(Math.random() * 6)],
+      });
+
     const onKeypress = (e) => {
       if (rotationKeys.includes(e.key)) {
-        const centerCubieIndex = indexOfClosestFaceCenterCubie(
-          cubiesMeshes,
-          camera
-        );
-
-        const userRotation = {
-          // keyCodes below 97 are uppercase, and
-          // ex. 'f' is clockwise, 'F' is counter-clockwise
-          isCounterClockwise: e.keyCode < 97,
-          centerCubieIndex: relativeRotationFace(e.key, centerCubieIndex),
-        };
-
-        loop.userRotationQueueEnqueue(userRotation);
+        rotate(e.key);
       } else if (e.keyCode === 32) {
         // spacebar for random rotation
-        loop.userRotationQueueEnqueue({
-          isCounterClockwise: Math.random() >= 0.5,
-          centerCubieIndex: centerIndexes[Math.floor(Math.random() * 6)],
-        });
+        rotateRandom();
       }
     };
     window.addEventListener("keypress", onKeypress);
+
+    document.getElementById("scramble").addEventListener("click", () => {
+      for (let i = 0; i < 25; i++) {
+        rotateRandom();
+      }
+    });
+    document.getElementById("random").addEventListener("click", rotateRandom);
+    [...document.querySelectorAll(".rotate-btn")].forEach((el) =>
+      el.addEventListener("click", () => rotate(el.id))
+    );
   }
 
   render() {

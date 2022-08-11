@@ -4,8 +4,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta charset="utf-8" />
     <title>rubiks cube</title>
-    <script type="module" src="./out.js"></script>
     <link href="style.css" rel="stylesheet" />
+    <script type="module" src="./out.js"></script>
   </head>
   <body>
     <div id="scene-container"></div>
@@ -20,6 +20,14 @@
     <div class="controls-bottom">
       <div class="left">
         <div>
+          <a tabindex="0" role="button" id="u" class="rotate-btn">
+            <span>U</span>
+          </a>
+          <a tabindex="0" role="button" id="U" class="rotate-btn">
+            <span>U'</span>
+          </a>
+        </div>
+        <div>
           <a tabindex="0" role="button" id="l" class="rotate-btn">
             <span>L</span>
           </a>
@@ -30,11 +38,11 @@
       </div>
       <div class="center">
         <div>
-          <a tabindex="0" role="button" id="u" class="rotate-btn">
-            <span>U</span>
+          <a tabindex="0" role="button" id="b" class="rotate-btn">
+            <span>B</span>
           </a>
-          <a tabindex="0" role="button" id="U" class="rotate-btn">
-            <span>U'</span>
+          <a tabindex="0" role="button" id="B" class="rotate-btn">
+            <span>B'</span>
           </a>
         </div>
         <div>
@@ -45,6 +53,8 @@
             <span>F'</span>
           </a>
         </div>
+      </div>
+      <div class="right">
         <div>
           <a tabindex="0" role="button" id="d" class="rotate-btn">
             <span>D</span>
@@ -53,8 +63,6 @@
             <span>D'</span>
           </a>
         </div>
-      </div>
-      <div class="right">
         <div>
           <a tabindex="0" role="button" id="r" class="rotate-btn">
             <span>R</span>
