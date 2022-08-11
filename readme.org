@@ -31,7 +31,7 @@ Dev:
 yarn
 # run dev.js esbuild watcher
 yarn start
-# visit localhost:8080
+# visit localhost:8080 (separate terminal)
 npx http-server
 #+end_src
 
@@ -64,10 +64,10 @@ Both ~yarn start~ and ~yarn build~ create a ~public/out.js~ bundle.
 
 All 27 cubies are oriented & colored the same (and have the default '[[https://threejs.org/docs/#api/en/core/Object3D.up][up]]' of 0,1,0). The centermost cubie, which is technically unnecessary, is at world position 0,0,0.
 
-The cubies are generated via a nested ~for~ loop in ~cubies.js~, and their resulting indices from 0 to 26 are an arbitrary consequence of how I originally wrote the code. These initial indices are important, however, in that they represent 27 fixed /locations/. When the cubies are first generated, each one's index matches its location. Every time a cubie moves, though, its location is updated to a new location. (See ~cubies.org~ for the admittedly not-immediately-intuitive location layout.) Note that the /position/ is different, in that it represents a cubie's world space xyz position at any given moment. There are only 27 locations, but there are many positions since these comprise every spot along every rotation path when a cubie animates from one location to another.
+The cubies are generated via a nested ~for~ loop in ~cubies.js~, and their resulting indices from 0 to 26 are an arbitrary consequence of how I originally wrote the code. These initial indices are important, however, in that they represent 27 fixed /locations/. When the cubies are first generated, each one's index matches its location. Every time a cubie moves, though, its location is updated to a new location. (See ~cubies.org~ for the admittedly not-immediately-intuitive location layout.) A cubie's /position/ is different, in that it represents the cubie's world space xyz position at any given moment. There are only 27 locations, but there are numerous positions since these comprise every spot along every rotation path when a cubie animates from one location to another.
 
 - *cubieIndex*: unique cubie ID
-- *location*: which of the original, unmoving 27 spots a cubie is inhabiting
+- *location*: the original, unmoving 27 spots that a cubie can inhabit
 - *position*: a cubie's current [[https://threejs.org/docs/#api/en/math/Vector3][Vector3(x,y,z)]] in three.js world space
 
 * Loop
@@ -102,8 +102,8 @@ The first loop for each rotation undergoes an init. The face-to-rotate and clock
 After init, the actual loop:
 
 - bumps ~t~ up (for counter-clockwise) or down (for clockwise) by the ~rotationSpeed~ amount set in ~constants.js~
-- determines and assigns each cubie's new position
-- rotates each cubie by [[https://threejs.org/docs/#api/en/math/Quaternion.slerpQuaternions][slerping]] its initial quaternion to the calculated (multiplied) one, adjusted over time via ~t * 4~ (since ~t~ moves in 0.25 increments to correspond to 90 degrees of a rotation path, but slerp's ~t~ is 0 to 1 (or 1 to 0))
+- determines and assigns each cubie's new position along the edge/corner rotation path, adjusted over time via ~t~
+- rotates each cubie by [[https://threejs.org/docs/#api/en/math/Quaternion.slerpQuaternions][slerping]] (spherical linear interpolation) its initial quaternion to the calculated end rotation, adjusted over time via ~t * 4~ (since ~t~ moves in 0.25 increments to correspond to 90 degrees of a rotation path, but slerp's ~t~ is 0 to 1 (or 1 to 0))
 - dequeues the user rotation if ~t~ has reached or exceeded ~endingT~; viz. the animated cubies have reached their destinations
 - flips the flag ~isReadyToInitNewUserRotation~ in order for the next user rotation to init
 
@@ -134,6 +134,6 @@ This [[https://eater.net/quaternions][explorable video series of visualizing qua
 
 "Queueing" has five vowels in a row. I'd never thought about that until I wrote this readme.
 
-'[[https://threejs.org/docs/#api/en/core/Object3D.up][Up]]' is three.js's "this side up" Vector3, used by Object3D, lights, etc.; 0,1,0 by default.
+'[[https://threejs.org/docs/#api/en/core/Object3D.up][Up]]' is three.js's "this side up" Vector3, used by Object3D, lights, etc. It is 0,1,0 by default.
 
 Although I'm careful with the words "location" and "position," I'm not careful with "rotation." Sometimes I mean "the face (or cubie of this face) that's being twisted," and sometimes I mean "the actual rotation quaternion of a cubie."
