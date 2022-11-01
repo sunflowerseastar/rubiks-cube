@@ -1,13 +1,13 @@
 import {
   BoxGeometry,
+  BufferGeometry,
   Color,
   Float32BufferAttribute,
-  MathUtils,
   Mesh,
   MeshBasicMaterial,
 } from "three";
 
-import { cubieEdgeSize, gapSize } from "./constants.js";
+import { cubieEdgeSize, gapSize } from "./constants";
 
 const posLeft = (cubieEdgeSize + gapSize) * -1;
 const posRight = cubieEdgeSize + gapSize;
@@ -15,7 +15,13 @@ const posCenter = 0;
 
 const lcr = [posLeft, posCenter, posRight];
 
-function createCubies() {
+export type Cubie = Mesh & {
+  isCenterCubie?: boolean;
+  cubieIndex?: number;
+  location?: number;
+}
+export type CubiesMeshes = Cubie[]
+function createCubies(): CubiesMeshes {
   const cubieGeometry = new BoxGeometry(
     cubieEdgeSize,
     cubieEdgeSize,
@@ -57,7 +63,6 @@ function createCubies() {
   let cubies = [];
   let cubieIndex = 0;
   const centerCubieIndexes = [4, 10, 12, 14, 16, 22];
-  const innerCenterCubieIndex = 13;
 
   for (let i = 0; i < lcr.length; i += 1) {
     let layer = [];
@@ -77,14 +82,13 @@ function createCubies() {
     }
     cubies.push(layer);
   }
-  // console.log("cubies", cubies);
 
   let cubiesMeshes = [];
   let cubieIndex2 = 0;
   for (let i = 0; i < cubies.length; i += 1) {
     for (let j = 0; j < cubies.length; j += 1) {
       for (let k = 0; k < cubies.length; k += 1) {
-        let cubie;
+        let cubie: Cubie;
 
         altCubieGeometry.setAttribute(
           "color",

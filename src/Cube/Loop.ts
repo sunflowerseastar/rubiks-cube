@@ -4,7 +4,7 @@
  * World.js. Those events simply push a new userRotation on the
  * userRotationQueue that lives here in Loop.
 
- * The animation loop is always running, originating from main.js's
+ * The animation loop is always running, originating from main.ts's
  * world.start(). It's always running because we want OrbitControls; as in,
  * opposed to starting the animation loop whenever there are rotations and
  * stopping the animation loop when userRotationQueue is exhausted.
@@ -28,35 +28,43 @@ import {
   MathUtils,
   Matrix4,
   Object3D,
+  PerspectiveCamera,
   Quaternion,
+  Scene,
+  Vector,
   Vector3,
+  WebGLRenderer,
 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
-import { createUp } from "./utilities.js";
-import { RotationPath } from "./rotationPath.js";
+import { createUp } from "./utilities";
+import { RotationPath } from "./rotationPath";
 import {
-  cubieEdgeSize,
   cubieSizePlusGapSize,
   faceIndexToCubieLocationsLookup,
-  gapSize,
   rotationSpeed,
-} from "./constants.js";
+} from "./constants";
+import { Cubie, CubiesMeshes } from "./cubies";
 
-let controls;
-let centerCubieIndex;
-let isCounterClockwise;
+export type UserRotation = {
+  isCounterClockwise: boolean;
+  centerCubieIndex: number;
+};
+
+let controls: OrbitControls;
+let centerCubieIndex: number;
+let isCounterClockwise: boolean;
 let isReadyToInitNewUserRotation = true;
 
 // 't' is the travel point along the rotation path, expressed from 0 to 1.
-let t;
+let t: number;
 // 'endingT' is set at the init of each rotation to be 90 degrees ahead of t
-let endingT;
+let endingT: number;
 
 // 'up' and the rotation paths are recalculated on every rotation init based on
 // which face it is
 let up;
-let edgeRotationPath, cornerRotationPath;
+let edgeRotationPath: RotationPath, cornerRotationPath: RotationPath;
 
 // |----+---+----|
 // | TL | T | TR |
@@ -72,22 +80,45 @@ let edgeRotationPath, cornerRotationPath;
 // | iq       | initial quaternion (pre-rotation) | ~iql~, ~iqtr~             |
 // | mq       | multiplied quaternion (end goal)  | ~mql~, ~mqtr~             |
 
-let iqc, iqr, iqt, iql, iqb;
-let iqtr, iqtl, iqbl, iqbr;
-let mqc, mqr, mqt, mql, mqb;
-let mqtr, mqtl, mqbl, mqbr;
-let rotCubieC, rotCubieB, rotCubieL, rotCubieT, rotCubieR;
-let rotCubieTR, rotCubieTL, rotCubieBL, rotCubieBR;
+let iqc: Quaternion,
+  iqr: Quaternion,
+  iqt: Quaternion,
+  iql: Quaternion,
+  iqb: Quaternion;
+let iqtr: Quaternion, iqtl: Quaternion, iqbl: Quaternion, iqbr: Quaternion;
+let mqc: Quaternion,
+  mqr: Quaternion,
+  mqt: Quaternion,
+  mql: Quaternion,
+  mqb: Quaternion;
+let mqtr: Quaternion, mqtl: Quaternion, mqbl: Quaternion, mqbr: Quaternion;
+let rotCubieC: Cubie,
+  rotCubieB: Cubie,
+  rotCubieL: Cubie,
+  rotCubieT: Cubie,
+  rotCubieR: Cubie;
+let rotCubieTR: Cubie, rotCubieTL: Cubie, rotCubieBL: Cubie, rotCubieBR: Cubie;
 
 class Loop {
-  constructor(camera, scene, renderer, cubiesMeshes) {
+  camera: PerspectiveCamera;
+  scene: Scene;
+  renderer: WebGLRenderer;
+  cubiesMeshes: CubiesMeshes;
+  userRotationQueue: UserRotation[];
+
+  constructor(
+    camera: PerspectiveCamera,
+    scene: Scene,
+    renderer: WebGLRenderer,
+    cubiesMeshes: any
+  ) {
     this.camera = camera;
     this.scene = scene;
     this.renderer = renderer;
     this.cubiesMeshes = cubiesMeshes;
 
     // this is the queue that holds the rotations that the user has initiated
-    // with keypresses in World.js
+    // with keypresses in main.ts
     this.userRotationQueue = [];
 
     controls = new OrbitControls(this.camera, this.renderer.domElement);
@@ -95,7 +126,7 @@ class Loop {
     controls.dampingFactor = 0.3;
   }
 
-  userRotationQueueEnqueue(userRotation) {
+  userRotationQueueEnqueue(userRotation: UserRotation) {
     this.userRotationQueue.push(userRotation);
   }
   userRotationQueueDequeue() {
@@ -127,7 +158,12 @@ class Loop {
             corners: cornerLocations,
             normal: { axis, sign },
           } = faceIndexToCubieLocationsLookup[centerCubieIndex];
-          edgeRotationPath = new RotationPath(cubieSizePlusGapSize, axis, sign);
+          edgeRotationPath = new RotationPath(
+            cubieSizePlusGapSize,
+            axis,
+            sign,
+            cubieSizePlusGapSize
+          );
           const distCorner = Math.hypot(
             cubieSizePlusGapSize,
             cubieSizePlusGapSize
@@ -140,41 +176,42 @@ class Loop {
           );
           up = createUp(axis, sign);
 
-          rotCubieC = this.cubiesMeshes.find(
-            (c) => c.location === centerCubieIndex
-          );
+          // the `|| this.cubiesMeshes[0]` parts are to make typescript happy
+          rotCubieC =
+            this.cubiesMeshes.find((c) => c.location === centerCubieIndex) ||
+            this.cubiesMeshes[0];
           iqc = rotCubieC.quaternion.clone();
-          rotCubieR = this.cubiesMeshes.find(
-            (c) => c.location === edgeLocations[0]
-          );
+          rotCubieR =
+            this.cubiesMeshes.find((c) => c.location === edgeLocations[0]) ||
+            this.cubiesMeshes[0];
           iqr = rotCubieR.quaternion.clone();
-          rotCubieT = this.cubiesMeshes.find(
-            (c) => c.location === edgeLocations[1]
-          );
+          rotCubieT =
+            this.cubiesMeshes.find((c) => c.location === edgeLocations[1]) ||
+            this.cubiesMeshes[0];
           iqt = rotCubieT.quaternion.clone();
-          rotCubieL = this.cubiesMeshes.find(
-            (c) => c.location === edgeLocations[2]
-          );
+          rotCubieL =
+            this.cubiesMeshes.find((c) => c.location === edgeLocations[2]) ||
+            this.cubiesMeshes[0];
           iql = rotCubieL.quaternion.clone();
-          rotCubieB = this.cubiesMeshes.find(
-            (c) => c.location === edgeLocations[3]
-          );
+          rotCubieB =
+            this.cubiesMeshes.find((c) => c.location === edgeLocations[3]) ||
+            this.cubiesMeshes[0];
           iqb = rotCubieB.quaternion.clone();
-          rotCubieTR = this.cubiesMeshes.find(
-            (c) => c.location === cornerLocations[0]
-          );
+          rotCubieTR =
+            this.cubiesMeshes.find((c) => c.location === cornerLocations[0]) ||
+            this.cubiesMeshes[0];
           iqtr = rotCubieTR.quaternion.clone();
-          rotCubieTL = this.cubiesMeshes.find(
-            (c) => c.location === cornerLocations[1]
-          );
+          rotCubieTL =
+            this.cubiesMeshes.find((c) => c.location === cornerLocations[1]) ||
+            this.cubiesMeshes[0];
           iqtl = rotCubieTL.quaternion.clone();
-          rotCubieBL = this.cubiesMeshes.find(
-            (c) => c.location === cornerLocations[2]
-          );
+          rotCubieBL =
+            this.cubiesMeshes.find((c) => c.location === cornerLocations[2]) ||
+            this.cubiesMeshes[0];
           iqbl = rotCubieBL.quaternion.clone();
-          rotCubieBR = this.cubiesMeshes.find(
-            (c) => c.location === cornerLocations[3]
-          );
+          rotCubieBR =
+            this.cubiesMeshes.find((c) => c.location === cornerLocations[3]) ||
+            this.cubiesMeshes[0];
           iqbr = rotCubieBR.quaternion.clone();
 
           // one quarter turn per the 'up' of the currently rotating face
@@ -204,7 +241,7 @@ class Loop {
 
           // 2. Update the rotated cubies' `location` property with their new locations
           this.cubiesMeshes.forEach((c) => {
-            if (edgeLocations.includes(c.location)) {
+            if (c.location && edgeLocations.includes(c.location)) {
               const arrayIndex = edgeLocations.indexOf(c.location);
               const newIndex =
                 (arrayIndex +
@@ -212,7 +249,7 @@ class Loop {
                 edgeLocations.length;
               const newLocation = edgeLocations[newIndex];
               c.location = newLocation;
-            } else if (cornerLocations.includes(c.location)) {
+            } else if (c.location && cornerLocations.includes(c.location)) {
               const arrayIndex = cornerLocations.indexOf(c.location);
               const newIndex =
                 (arrayIndex +

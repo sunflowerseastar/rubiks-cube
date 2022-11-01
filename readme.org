@@ -51,20 +51,20 @@ Both ~yarn start~ and ~yarn build~ create a ~public/out.js~ bundle.
   - ~style.css~ - simple styles
   - ~out.js~ - bundle file from ~yarn start~ or ~yarn build~
 - ~src/~ - js to be bundled
-  - ~main.js~ - entry for index.html
+  - ~main.ts~ - entry for index.html
   - ~Cube/~
-    - ~Cube.js~ - top-level scene/cube creation; rotate & start hooks
-    - ~Loop.js~ - animation loop; user rotation queue; rotation handling
-    - ~cubies.js~ - 27 6-colored three.js cubies positioned as a cube
-    - ~rotationPath.js~ - radius- and xyz-variable circle creation class
+    - ~Cube.ts~ - top-level scene/cube creation; rotate & start hooks
+    - ~Loop.ts~ - animation loop; user rotation queue; rotation handling
+    - ~cubies.ts~ - 27 6-colored three.js cubies positioned as a cube
+    - ~rotationPath.ts~ - radius- and xyz-variable circle creation class
     - ~threejs-helpers/~ - basic three.js scaffolding
-    - ~utilities.js~ - these are, uh, utilities
+    - ~utilities.ts~ - these are, uh, utilities
 
 * Cubies
 
 All 27 cubies are oriented & colored the same (and have the default '[[https://threejs.org/docs/#api/en/core/Object3D.up][up]]' of 0,1,0). The centermost cubie, which is technically unnecessary, is at world position 0,0,0.
 
-The cubies are generated via a nested ~for~ loop in ~cubies.js~, and their resulting indices from 0 to 26 are an arbitrary consequence of how I originally wrote the code. These initial indices are important, however, in that they represent 27 fixed /locations/. When the cubies are first generated, each one's index matches its location. Every time a cubie moves, though, its location is updated to a new location. (See ~cubies.org~ for the admittedly not-immediately-intuitive location layout.) A cubie's /position/ is different, in that it represents the cubie's world space xyz position at any given moment. There are only 27 locations, but there are numerous positions since these comprise every spot along every rotation path when a cubie animates from one location to another.
+The cubies are generated via a nested ~for~ loop in ~cubies.ts~, and their resulting indices from 0 to 26 are an arbitrary consequence of how I originally wrote the code. These initial indices are important, however, in that they represent 27 fixed /locations/. When the cubies are first generated, each one's index matches its location. Every time a cubie moves, though, its location is updated to a new location. (See ~cubies.org~ for the admittedly not-immediately-intuitive location layout.) A cubie's /position/ is different, in that it represents the cubie's world space xyz position at any given moment. There are only 27 locations, but there are numerous positions since these comprise every spot along every rotation path when a cubie animates from one location to another.
 
 - *cubieIndex*: unique cubie ID
 - *location*: the original, unmoving 27 spots that a cubie can inhabit
@@ -72,7 +72,7 @@ The cubies are generated via a nested ~for~ loop in ~cubies.js~, and their resul
 
 * Loop
 
-The animation loop kicks off via ~cube.start()~ in ~main.js~. The basic loop render is down at the very bottom of this start function in ~Loop.js~:
+The animation loop kicks off via ~cube.start()~ in ~main.ts~. The basic loop render is down at the very bottom of this start function in ~Loop.ts~:
 
 #+begin_src js
 this.renderer.render(this.scene, this.camera);
@@ -101,7 +101,7 @@ The first loop for each rotation undergoes an init. The face-to-rotate and clock
 
 After init, the actual loop:
 
-- bumps ~t~ up (for counter-clockwise) or down (for clockwise) by the ~rotationSpeed~ amount set in ~constants.js~
+- bumps ~t~ up (for counter-clockwise) or down (for clockwise) by the ~rotationSpeed~ amount set in ~constants.ts~
 - determines and assigns each cubie's new position along the edge/corner rotation path, adjusted over time via ~t~
 - rotates each cubie by [[https://threejs.org/docs/#api/en/math/Quaternion.slerpQuaternions][slerping]] (spherical linear interpolation) its initial quaternion to the calculated end rotation, adjusted over time via ~t * 4~ (since ~t~ moves in 0.25 increments to correspond to 90 degrees of a rotation path, but slerp's ~t~ is 0 to 1 (or 1 to 0))
 - dequeues the user rotation if ~t~ has reached or exceeded ~endingT~; viz. the animated cubies have reached their destinations
@@ -109,7 +109,7 @@ After init, the actual loop:
 
 -------------
 
-There are cryptic variable abbreviations littered around ~Loop.js~, even though I know it induces wrath from the verbosity dogmatists. This little explanation here at the end of the readme is a mea culpa, I guess.
+There are cryptic variable abbreviations littered around ~Loop.ts~, even though I know it induces wrath from the verbosity dogmatists. This little explanation here at the end of the readme is a mea culpa, I guess.
 
 #+begin_src
 +-------------+

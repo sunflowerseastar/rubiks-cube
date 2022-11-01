@@ -1,6 +1,6 @@
 require("esbuild")
   .build({
-    entryPoints: ["src/main.js"],
+    entryPoints: ["src/main.ts"],
     outfile: "public/out.js",
     bundle: true,
     watch: {

@@ -30,14 +30,30 @@ export const rotationKeys = [
 export const centerIndexes = [10, 4, 14, 22, 16, 12]; // d l f r u b
 
 // 'face index' as in, rotation face, aka 'center cubie index'
-export const faceIndexToCubieLocationsLookup = {
+export type Axis = "x" | "y" | "z"
+export enum Sign {
+  NEGATIVE = -1,
+  POSITIVE = 1,
+}
+type Face = {
+    edges: number[], // r  t  l  b
+    corners: number[], // tr tl bl br
+    normal: {
+      axis: Axis,
+      sign: Sign,
+    },
+}
+interface Faces {
+  [index: number]: Face;
+}
+export const faceIndexToCubieLocationsLookup: Faces = {
   4: {
     // left (orange)
     edges: [5, 7, 3, 1], // r  t  l  b
     corners: [8, 6, 0, 2], // tr tl bl br
     normal: {
       axis: "x",
-      sign: -1,
+      sign: Sign.NEGATIVE,
     },
   },
   10: {
@@ -46,7 +62,7 @@ export const faceIndexToCubieLocationsLookup = {
     corners: [0, 18, 20, 2], // tr tl bl br
     normal: {
       axis: "y",
-      sign: -1,
+      sign: Sign.NEGATIVE,
     },
   },
   12: {
@@ -55,7 +71,7 @@ export const faceIndexToCubieLocationsLookup = {
     corners: [6, 24, 18, 0], // tr tl bl br
     normal: {
       axis: "z",
-      sign: -1,
+      sign: Sign.NEGATIVE,
     },
   },
   14: {
@@ -64,7 +80,7 @@ export const faceIndexToCubieLocationsLookup = {
     corners: [26, 8, 2, 20], // tr tl bl br
     normal: {
       axis: "z",
-      sign: 1,
+      sign: Sign.POSITIVE,
     },
   },
   16: {
@@ -73,7 +89,7 @@ export const faceIndexToCubieLocationsLookup = {
     corners: [24, 6, 8, 26], // tr tl bl br
     normal: {
       axis: "y",
-      sign: 1,
+      sign: Sign.POSITIVE,
     },
   },
   22: {
@@ -82,7 +98,7 @@ export const faceIndexToCubieLocationsLookup = {
     corners: [24, 26, 20, 18], // tr tl bl br
     normal: {
       axis: "x",
-      sign: 1,
+      sign: Sign.POSITIVE,
     },
   },
 };

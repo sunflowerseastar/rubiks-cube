@@ -1,38 +1,47 @@
-import { Vector3 } from "three";
+import { PerspectiveCamera, Vector3 } from "three";
+import { Axis, Sign } from "./constants";
+import { CubiesMeshes } from "./cubies";
 
-export const createUp = (axis, sign) =>
+type CreateUp = (axis: Axis, sign: Sign) => Vector3;
+export const createUp: CreateUp = (axis, sign) =>
   new Vector3(
     sign * (axis === "x" ? 1 : 0),
     sign * (axis === "y" ? 1 : 0),
     sign * (axis === "z" ? 1 : 0)
   );
 
-// Find the face to rotate by measuring the distance between the camera
-// and all of the center cubies. The closest center cubie to the camera
-// represents the face to rotate.
-export const indexOfClosestFaceCenterCubie = (cubiesMeshes, camera) =>
+// Find the face to rotate by measuring the distance between the camera and all
+// of the center cubies. The closest center cubie to the camera represents the
+// face to rotate. The fallback `14` is to appease typescript.
+type IndexOfClosestFaceCenterCubie = (
+  cubiesMeshes: CubiesMeshes,
+  camera: PerspectiveCamera
+) => number;
+
+export const indexOfClosestFaceCenterCubie: IndexOfClosestFaceCenterCubie = (
+  cubiesMeshes,
+  camera
+) =>
   cubiesMeshes
-    .reduce(
-      (acc, c, i) =>
-        c.isCenterCubie
-          ? [
-              ...acc,
-              {
-                d: camera.position.distanceTo(c.position),
-                i,
-              },
-            ]
-          : acc,
-      []
-    )
-    .sort((a, b) => a.d - b.d)[0].i;
+    .filter(({ isCenterCubie }) => isCenterCubie)
+    .map(({ position, cubieIndex }) => ({
+      d: camera.position.distanceTo(position),
+      cubieIndex,
+    }))
+    .sort((a, b) => a.d - b.d)[0].cubieIndex || 14;
 
 // [ 0,  1,  2,  3]
 // [14, 22, 12,  4]
 // [ F,  R,  B,  L]
 const frblCenters = [14, 22, 12, 4];
 const frblAdjustments = ["f", "r", "b", "l"];
-export const relativeRotationFace = (rotationKey, center) => {
+
+type RelativeRotationFace = (rotationKey: string, center: number) => number;
+
+export const relativeRotationFace: RelativeRotationFace = (
+  rotationKey,
+  center
+) => {
   const rotationKeyLower = rotationKey.toLowerCase();
   if (frblCenters.includes(center)) {
     // f r b l
@@ -62,6 +71,8 @@ export const relativeRotationFace = (rotationKey, center) => {
         return 12;
       case "d":
         return 14;
+      default:
+        return 14;
     }
   } else {
     // down
@@ -77,6 +88,8 @@ export const relativeRotationFace = (rotationKey, center) => {
       case "u":
         return 14;
       case "d":
+        return 12;
+      default:
         return 12;
     }
   }

@@ -1,24 +1,25 @@
-import { createCamera } from "./threejs-helpers/camera.js";
-import { createCubies } from "./cubies.js";
-import { createScene } from "./threejs-helpers/scene.js";
+import { PerspectiveCamera, Scene } from "three";
 
-import { createRenderer } from "./threejs-helpers/renderer.js";
-import { Resizer } from "./threejs-helpers/Resizer.js";
-import { Loop } from "./Loop.js";
+import { createCamera } from "./threejs-helpers/camera";
+import { CubiesMeshes, createCubies } from "./cubies";
+import { createScene } from "./threejs-helpers/scene";
+
+import { createRenderer } from "./threejs-helpers/renderer";
+import { Loop, UserRotation } from "./Loop";
 import {
   indexOfClosestFaceCenterCubie,
   relativeRotationFace,
-} from "./utilities.js";
-import { centerIndexes, rotationKeys } from "./constants.js";
+} from "./utilities";
+import { centerIndexes } from "./constants";
 
-let camera;
+let camera: PerspectiveCamera;
 let renderer;
-let scene;
-let loop;
-let cubiesMeshes;
+let scene: Scene;
+let loop: Loop;
+let cubiesMeshes: CubiesMeshes;
 
 class Cube {
-  constructor(container) {
+  constructor(container: HTMLDivElement) {
     camera = createCamera();
     renderer = createRenderer();
     scene = createScene();
@@ -30,16 +31,14 @@ class Cube {
 
     loop = new Loop(camera, scene, renderer, cubiesMeshes);
     container.append(renderer.domElement);
-
-    const resizer = new Resizer(container, camera, renderer);
   }
 
-  rotate(face) {
+  rotate(face: string) {
     const centerCubieIndex = indexOfClosestFaceCenterCubie(
       cubiesMeshes,
       camera
     );
-    const userRotation = {
+    const userRotation: UserRotation = {
       // ex. 'f' is clockwise, 'F' is counter-clockwise
       isCounterClockwise: face.toUpperCase() === face,
       centerCubieIndex: relativeRotationFace(face, centerCubieIndex),

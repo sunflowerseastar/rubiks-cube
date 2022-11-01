@@ -3,14 +3,29 @@
   "version": "0.0.9",
   "author": "Grant Surlyn <grant@sunflowerseastar.com>",
   "license": "GPL-3.0",
+  "scripts": {
+    "build": "esbuild src/main.ts --bundle --minify --outfile=public/out.js",
+    "dev": "node dev.js",
+    "prettier:check": "prettier --check '**/*.{ts,js,css,json}'",
+    "prettier:write": "prettier --write '**/*.{ts,js,css,json}'",
+    "start": "node dev.js"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  },
+  "lint-staged": {
+    "*.{tsx,js,css,md,json}": [
+      "prettier --write"
+    ]
+  },
   "dependencies": {
     "three": "~0.143.0"
   },
-  "scripts": {
-    "build": "esbuild src/main.js --bundle --minify --outfile=public/out.js",
-    "dev": "node dev.js",
-    "prettier:check": "prettier --check '**/*.js'",
-    "prettier:write": "prettier --write '**/*.js'",
-    "start": "node dev.js"
+  "devDependencies": {
+    "@types/three": "~0.143.0",
+    "lint-staged": "^13.0.3",
+    "prettier": "^2.7.1",
+    "simple-git-hooks": "^2.8.1",
+    "typescript": "^4.8.4"
   }
 }
