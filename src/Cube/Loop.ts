@@ -241,7 +241,8 @@ class Loop {
 
           // 2. Update the rotated cubies' `location` property with their new locations
           this.cubiesMeshes.forEach((c) => {
-            if (c.location && edgeLocations.includes(c.location)) {
+            if (typeof c.location === "undefined") return;
+            if (edgeLocations.includes(c.location)) {
               const arrayIndex = edgeLocations.indexOf(c.location);
               const newIndex =
                 (arrayIndex +
@@ -249,7 +250,7 @@ class Loop {
                 edgeLocations.length;
               const newLocation = edgeLocations[newIndex];
               c.location = newLocation;
-            } else if (c.location && cornerLocations.includes(c.location)) {
+            } else if (cornerLocations.includes(c.location)) {
               const arrayIndex = cornerLocations.indexOf(c.location);
               const newIndex =
                 (arrayIndex +
