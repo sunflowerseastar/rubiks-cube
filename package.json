@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "author": "Grant Surlyn <grant@sunflowerseastar.com>",
   "license": "GPL-3.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/sunflowerseastar/rubiks-cube"
+  },
   "scripts": {
     "build": "esbuild src/main.ts --bundle --minify --outfile=public/out.js",
     "dev": "node dev.js",
