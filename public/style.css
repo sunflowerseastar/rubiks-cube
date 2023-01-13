@@ -12,6 +12,7 @@ body {
   margin: 0;
   font-family: system-ui, sans-serif;
   letter-spacing: 0.05em;
+  overflow: hidden;
 }
 ::selection {
   background-color: transparent;
