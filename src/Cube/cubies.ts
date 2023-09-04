@@ -19,8 +19,8 @@ export type Cubie = Mesh & {
   isCenterCubie?: boolean;
   cubieIndex?: number;
   location?: number;
-}
-export type CubiesMeshes = Cubie[]
+};
+export type CubiesMeshes = Cubie[];
 function createCubies(): CubiesMeshes {
   const cubieGeometry = new BoxGeometry(
     cubieEdgeSize,

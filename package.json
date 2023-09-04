@@ -10,15 +10,15 @@
   "scripts": {
     "build": "esbuild src/main.ts --bundle --minify --outfile=public/out.js",
     "dev": "node dev.js",
-    "prettier:check": "prettier --check '**/*.{ts,js,css,json}'",
-    "prettier:write": "prettier --write '**/*.{ts,js,css,json}'",
+    "prettier:check": "prettier --check '**/*.{ts,tsx,js,jsx,css,md,json}'",
+    "prettier:write": "prettier --write '**/*.{ts,tsx,js,jsx,css,md,json}'",
     "start": "node dev.js"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
   },
   "lint-staged": {
-    "*.{tsx,js,css,md,json}": [
+    "*.{ts,tsx,js,jsx,css,md,json}": [
       "prettier --write"
     ]
   },

@@ -30,19 +30,19 @@ export const rotationKeys = [
 export const centerIndexes = [10, 4, 14, 22, 16, 12]; // d l f r u b
 
 // 'face index' as in, rotation face, aka 'center cubie index'
-export type Axis = "x" | "y" | "z"
+export type Axis = "x" | "y" | "z";
 export enum Sign {
   NEGATIVE = -1,
   POSITIVE = 1,
 }
 type Face = {
-    edges: number[], // r  t  l  b
-    corners: number[], // tr tl bl br
-    normal: {
-      axis: Axis,
-      sign: Sign,
-    },
-}
+  edges: number[]; // r  t  l  b
+  corners: number[]; // tr tl bl br
+  normal: {
+    axis: Axis;
+    sign: Sign;
+  };
+};
 interface Faces {
   [index: number]: Face;
 }
