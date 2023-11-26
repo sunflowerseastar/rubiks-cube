@@ -1,7 +1,5 @@
-import { WebGLRenderer } from "three";
-
 function createRenderer() {
-  const renderer = new WebGLRenderer({ antialias: true });
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
   renderer.setPixelRatio(window.devicePixelRatio);
   renderer.setSize(window.innerWidth, window.innerHeight);
 

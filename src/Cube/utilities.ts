@@ -1,10 +1,9 @@
-import { PerspectiveCamera, Vector3 } from "three";
 import { Axis, Sign } from "./constants";
 import { CubiesMeshes } from "./cubies";
 
-type CreateUp = (axis: Axis, sign: Sign) => Vector3;
+type CreateUp = (axis: Axis, sign: Sign) => THREE.Vector3;
 export const createUp: CreateUp = (axis, sign) =>
-  new Vector3(
+  new THREE.Vector3(
     sign * (axis === "x" ? 1 : 0),
     sign * (axis === "y" ? 1 : 0),
     sign * (axis === "z" ? 1 : 0)
@@ -15,7 +14,7 @@ export const createUp: CreateUp = (axis, sign) =>
 // face to rotate. The fallback `14` is to appease typescript.
 type IndexOfClosestFaceCenterCubie = (
   cubiesMeshes: CubiesMeshes,
-  camera: PerspectiveCamera
+  camera: THREE.PerspectiveCamera
 ) => number;
 
 export const indexOfClosestFaceCenterCubie: IndexOfClosestFaceCenterCubie = (

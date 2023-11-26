@@ -12,9 +12,9 @@ import {
 } from "./utilities";
 import { centerIndexes } from "./constants";
 
-let camera: PerspectiveCamera;
+let camera: THREE.PerspectiveCamera;
 let renderer;
-let scene: Scene;
+let scene: THREE.Scene;
 let loop: Loop;
 let cubiesMeshes: CubiesMeshes;
 

@@ -1,12 +1,3 @@
-import {
-  BoxGeometry,
-  BufferGeometry,
-  Color,
-  Float32BufferAttribute,
-  Mesh,
-  MeshBasicMaterial,
-} from "three";
-
 import { cubieEdgeSize, gapSize } from "./constants";
 
 const posLeft = (cubieEdgeSize + gapSize) * -1;
@@ -15,25 +6,25 @@ const posCenter = 0;
 
 const lcr = [posLeft, posCenter, posRight];
 
-export type Cubie = Mesh & {
+export type Cubie = THREE.Mesh & {
   isCenterCubie?: boolean;
   cubieIndex?: number;
   location?: number;
 };
 export type CubiesMeshes = Cubie[];
 function createCubies(): CubiesMeshes {
-  const cubieGeometry = new BoxGeometry(
+  const cubieGeometry = new THREE.BoxGeometry(
     cubieEdgeSize,
     cubieEdgeSize,
     cubieEdgeSize
   ).toNonIndexed();
-  const altCubieGeometry = new BoxGeometry(
+  const altCubieGeometry = new THREE.BoxGeometry(
     cubieEdgeSize,
     cubieEdgeSize,
     cubieEdgeSize
   ).toNonIndexed();
-  const material = new MeshBasicMaterial({ vertexColors: true });
-  const altMaterial = new MeshBasicMaterial({ vertexColors: true });
+  const material = new THREE.MeshBasicMaterial({ vertexColors: true });
+  const altMaterial = new THREE.MeshBasicMaterial({ vertexColors: true });
 
   // put all 6 colors on every cubie, 1 per face
   const baseColors = [
@@ -44,7 +35,7 @@ function createCubies(): CubiesMeshes {
     0xeeeeee, // white
     0xfaedb9, // yellow
   ];
-  const color = new Color();
+  const color = new THREE.Color();
   let colors = [];
   const positionAttribute = cubieGeometry.getAttribute("position");
   for (let i = 0; i < positionAttribute.count; i += 6) {
@@ -57,7 +48,10 @@ function createCubies(): CubiesMeshes {
     colors.push(color.r, color.g, color.b);
     colors.push(color.r, color.g, color.b);
   }
-  cubieGeometry.setAttribute("color", new Float32BufferAttribute(colors, 3));
+  cubieGeometry.setAttribute(
+    "color",
+    new THREE.Float32BufferAttribute(colors, 3)
+  );
 
   // construct a doubly nested array `cubies` with all cubie positions
   let cubies = [];
@@ -92,7 +86,7 @@ function createCubies(): CubiesMeshes {
 
         altCubieGeometry.setAttribute(
           "color",
-          new Float32BufferAttribute(colors, 3)
+          new THREE.Float32BufferAttribute(colors, 3)
         );
 
         if (cubieIndex2 === 23) {
@@ -110,16 +104,16 @@ function createCubies(): CubiesMeshes {
           // }
           // altCubieGeometry.setAttribute(
           //   "color",
-          //   new Float32BufferAttribute(altColors, 3)
+          //   new THREE.Float32BufferAttribute(altColors, 3)
           // );
 
-          cubie = new Mesh(altCubieGeometry, altMaterial);
+          cubie = new THREE.Mesh(altCubieGeometry, altMaterial);
         } else {
           // DEV - dim all other cubies
           // material.opacity = 0.1;
           // material.transparent = true;
 
-          cubie = new Mesh(cubieGeometry, material);
+          cubie = new THREE.Mesh(cubieGeometry, material);
         }
         cubie.position.x = cubies[i][j][k].x;
         cubie.position.y = cubies[i][j][k].y;

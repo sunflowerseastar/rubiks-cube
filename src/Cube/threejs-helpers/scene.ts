@@ -1,9 +1,7 @@
-import { Color, Scene } from "three";
-
 function createScene() {
-  const scene = new Scene();
+  const scene = new THREE.Scene();
 
-  scene.background = new Color(0x242424);
+  scene.background = new THREE.Color(0x242424);
 
   return scene;
 }

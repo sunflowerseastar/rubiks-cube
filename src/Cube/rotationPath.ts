@@ -1,7 +1,6 @@
-import { Curve, Vector, Vector3 } from "three";
 import { Axis } from "./constants";
 
-class RotationPath extends Curve<Vector> {
+class RotationPath extends THREE.Curve<THREE.Vector> {
   radius: number;
   xyz: Axis;
   sign: number;
@@ -19,18 +18,18 @@ class RotationPath extends Curve<Vector> {
     const radians = 2 * Math.PI * t;
 
     return this.xyz === "x"
-      ? new Vector3(
+      ? new THREE.Vector3(
           this.axisDistance * this.sign,
           this.radius * Math.sin(radians),
           -this.radius * Math.cos(radians) * this.sign
         )
       : this.xyz === "y"
-      ? new Vector3(
+      ? new THREE.Vector3(
           this.radius * Math.cos(radians) * this.sign,
           this.axisDistance * this.sign,
           -this.radius * Math.sin(radians)
         )
-      : new Vector3(
+      : new THREE.Vector3(
           this.radius * Math.cos(radians) * this.sign,
           this.radius * Math.sin(radians),
           this.axisDistance * this.sign

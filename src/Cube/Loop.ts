@@ -23,19 +23,7 @@
  * | mq        | multiplied quaternion (end goal)           | mql, mqtr             |
  * | pt        | xyz point on a given rotation path per /t/ | pt90                  |
  */
-import {
-  Curve,
-  MathUtils,
-  Matrix4,
-  Object3D,
-  PerspectiveCamera,
-  Quaternion,
-  Scene,
-  Vector,
-  Vector3,
-  WebGLRenderer,
-} from "three";
-import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import { OrbitControls } from "./OrbitControls.js";
 
 import { createUp } from "./utilities";
 import { RotationPath } from "./rotationPath";
@@ -80,18 +68,24 @@ let edgeRotationPath: RotationPath, cornerRotationPath: RotationPath;
 // | iq       | initial quaternion (pre-rotation) | ~iql~, ~iqtr~             |
 // | mq       | multiplied quaternion (end goal)  | ~mql~, ~mqtr~             |
 
-let iqc: Quaternion,
-  iqr: Quaternion,
-  iqt: Quaternion,
-  iql: Quaternion,
-  iqb: Quaternion;
-let iqtr: Quaternion, iqtl: Quaternion, iqbl: Quaternion, iqbr: Quaternion;
-let mqc: Quaternion,
-  mqr: Quaternion,
-  mqt: Quaternion,
-  mql: Quaternion,
-  mqb: Quaternion;
-let mqtr: Quaternion, mqtl: Quaternion, mqbl: Quaternion, mqbr: Quaternion;
+let iqc: THREE.Quaternion,
+  iqr: THREE.Quaternion,
+  iqt: THREE.Quaternion,
+  iql: THREE.Quaternion,
+  iqb: THREE.Quaternion;
+let iqtr: THREE.Quaternion,
+  iqtl: THREE.Quaternion,
+  iqbl: THREE.Quaternion,
+  iqbr: THREE.Quaternion;
+let mqc: THREE.Quaternion,
+  mqr: THREE.Quaternion,
+  mqt: THREE.Quaternion,
+  mql: THREE.Quaternion,
+  mqb: THREE.Quaternion;
+let mqtr: THREE.Quaternion,
+  mqtl: THREE.Quaternion,
+  mqbl: THREE.Quaternion,
+  mqbr: THREE.Quaternion;
 let rotCubieC: Cubie,
   rotCubieB: Cubie,
   rotCubieL: Cubie,
@@ -100,16 +94,16 @@ let rotCubieC: Cubie,
 let rotCubieTR: Cubie, rotCubieTL: Cubie, rotCubieBL: Cubie, rotCubieBR: Cubie;
 
 class Loop {
-  camera: PerspectiveCamera;
-  scene: Scene;
-  renderer: WebGLRenderer;
+  camera: THREE.PerspectiveCamera;
+  scene: THREE.Scene;
+  renderer: THREE.WebGLRenderer;
   cubiesMeshes: CubiesMeshes;
   userRotationQueue: UserRotation[];
 
   constructor(
-    camera: PerspectiveCamera,
-    scene: Scene,
-    renderer: WebGLRenderer,
+    camera: THREE.PerspectiveCamera,
+    scene: THREE.Scene,
+    renderer: THREE.WebGLRenderer,
     cubiesMeshes: any
   ) {
     this.camera = camera;
@@ -215,28 +209,28 @@ class Loop {
           iqbr = rotCubieBR.quaternion.clone();
 
           // one quarter turn per the 'up' of the currently rotating face
-          const currentFace90q = new Quaternion();
-          currentFace90q.setFromAxisAngle(up, MathUtils.degToRad(90));
+          const currentFace90q = new THREE.Quaternion();
+          currentFace90q.setFromAxisAngle(up, THREE.MathUtils.degToRad(90));
 
           // 'mq' means 'multiplied quaternion'. Essentially, take the current
           // quaternion of a cubie and multiply it by a 90 degree rotation.
-          mqc = new Quaternion();
+          mqc = new THREE.Quaternion();
           mqc.multiplyQuaternions(currentFace90q, iqc);
-          mqr = new Quaternion();
+          mqr = new THREE.Quaternion();
           mqr.multiplyQuaternions(currentFace90q, iqr);
-          mqt = new Quaternion();
+          mqt = new THREE.Quaternion();
           mqt.multiplyQuaternions(currentFace90q, iqt);
-          mql = new Quaternion();
+          mql = new THREE.Quaternion();
           mql.multiplyQuaternions(currentFace90q, iql);
-          mqb = new Quaternion();
+          mqb = new THREE.Quaternion();
           mqb.multiplyQuaternions(currentFace90q, iqb);
-          mqtr = new Quaternion();
+          mqtr = new THREE.Quaternion();
           mqtr.multiplyQuaternions(currentFace90q, iqtr);
-          mqtl = new Quaternion();
+          mqtl = new THREE.Quaternion();
           mqtl.multiplyQuaternions(currentFace90q, iqtl);
-          mqbl = new Quaternion();
+          mqbl = new THREE.Quaternion();
           mqbl.multiplyQuaternions(currentFace90q, iqbl);
-          mqbr = new Quaternion();
+          mqbr = new THREE.Quaternion();
           mqbr.multiplyQuaternions(currentFace90q, iqbr);
 
           // 2. Update the rotated cubies' `location` property with their new locations
