@@ -46,7 +46,7 @@ function main() {
     .addEventListener("click", cube.rotateRandom);
   document.getElementById("scramble")!.addEventListener("click", scramble);
   [...document.querySelectorAll(".rotate-btn")].forEach((el) =>
-    el.addEventListener("click", () => cube.rotate(el.id))
+    el.addEventListener("click", () => cube.rotate(el.id)),
   );
 
   document.getElementById("reset")!.addEventListener("click", reset);

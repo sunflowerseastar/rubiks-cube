@@ -3,7 +3,7 @@ function createCamera() {
     70,
     window.innerWidth / window.innerHeight,
     1,
-    10000
+    10000,
   );
   camera.position.z = 900;
 

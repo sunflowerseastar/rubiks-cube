@@ -16,12 +16,12 @@ function createCubies(): CubiesMeshes {
   const cubieGeometry = new THREE.BoxGeometry(
     cubieEdgeSize,
     cubieEdgeSize,
-    cubieEdgeSize
+    cubieEdgeSize,
   ).toNonIndexed();
   const altCubieGeometry = new THREE.BoxGeometry(
     cubieEdgeSize,
     cubieEdgeSize,
-    cubieEdgeSize
+    cubieEdgeSize,
   ).toNonIndexed();
   const material = new THREE.MeshBasicMaterial({ vertexColors: true });
   const altMaterial = new THREE.MeshBasicMaterial({ vertexColors: true });
@@ -50,7 +50,7 @@ function createCubies(): CubiesMeshes {
   }
   cubieGeometry.setAttribute(
     "color",
-    new THREE.Float32BufferAttribute(colors, 3)
+    new THREE.Float32BufferAttribute(colors, 3),
   );
 
   // construct a doubly nested array `cubies` with all cubie positions
@@ -86,7 +86,7 @@ function createCubies(): CubiesMeshes {
 
         altCubieGeometry.setAttribute(
           "color",
-          new THREE.Float32BufferAttribute(colors, 3)
+          new THREE.Float32BufferAttribute(colors, 3),
         );
 
         if (cubieIndex2 === 23) {

@@ -21,19 +21,19 @@ class RotationPath extends THREE.Curve<THREE.Vector> {
       ? new THREE.Vector3(
           this.axisDistance * this.sign,
           this.radius * Math.sin(radians),
-          -this.radius * Math.cos(radians) * this.sign
+          -this.radius * Math.cos(radians) * this.sign,
         )
       : this.xyz === "y"
-      ? new THREE.Vector3(
-          this.radius * Math.cos(radians) * this.sign,
-          this.axisDistance * this.sign,
-          -this.radius * Math.sin(radians)
-        )
-      : new THREE.Vector3(
-          this.radius * Math.cos(radians) * this.sign,
-          this.radius * Math.sin(radians),
-          this.axisDistance * this.sign
-        );
+        ? new THREE.Vector3(
+            this.radius * Math.cos(radians) * this.sign,
+            this.axisDistance * this.sign,
+            -this.radius * Math.sin(radians),
+          )
+        : new THREE.Vector3(
+            this.radius * Math.cos(radians) * this.sign,
+            this.radius * Math.sin(radians),
+            this.axisDistance * this.sign,
+          );
   }
 }
 

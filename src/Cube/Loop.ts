@@ -104,7 +104,7 @@ class Loop {
     camera: THREE.PerspectiveCamera,
     scene: THREE.Scene,
     renderer: THREE.WebGLRenderer,
-    cubiesMeshes: any
+    cubiesMeshes: any,
   ) {
     this.camera = camera;
     this.scene = scene;
@@ -156,17 +156,17 @@ class Loop {
             cubieSizePlusGapSize,
             axis,
             sign,
-            cubieSizePlusGapSize
+            cubieSizePlusGapSize,
           );
           const distCorner = Math.hypot(
             cubieSizePlusGapSize,
-            cubieSizePlusGapSize
+            cubieSizePlusGapSize,
           );
           cornerRotationPath = new RotationPath(
             distCorner,
             axis,
             sign,
-            cubieSizePlusGapSize
+            cubieSizePlusGapSize,
           );
           up = createUp(axis, sign);
 

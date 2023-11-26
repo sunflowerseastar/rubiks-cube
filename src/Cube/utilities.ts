@@ -6,7 +6,7 @@ export const createUp: CreateUp = (axis, sign) =>
   new THREE.Vector3(
     sign * (axis === "x" ? 1 : 0),
     sign * (axis === "y" ? 1 : 0),
-    sign * (axis === "z" ? 1 : 0)
+    sign * (axis === "z" ? 1 : 0),
   );
 
 // Find the face to rotate by measuring the distance between the camera and all
@@ -14,12 +14,12 @@ export const createUp: CreateUp = (axis, sign) =>
 // face to rotate. The fallback `14` is to appease typescript.
 type IndexOfClosestFaceCenterCubie = (
   cubiesMeshes: CubiesMeshes,
-  camera: THREE.PerspectiveCamera
+  camera: THREE.PerspectiveCamera,
 ) => number;
 
 export const indexOfClosestFaceCenterCubie: IndexOfClosestFaceCenterCubie = (
   cubiesMeshes,
-  camera
+  camera,
 ) =>
   cubiesMeshes
     .filter(({ isCenterCubie }) => isCenterCubie)
@@ -39,7 +39,7 @@ type RelativeRotationFace = (rotationKey: string, center: number) => number;
 
 export const relativeRotationFace: RelativeRotationFace = (
   rotationKey,
-  center
+  center,
 ) => {
   const rotationKeyLower = rotationKey.toLowerCase();
   if (frblCenters.includes(center)) {

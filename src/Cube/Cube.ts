@@ -36,7 +36,7 @@ class Cube {
   rotate(face: string) {
     const centerCubieIndex = indexOfClosestFaceCenterCubie(
       cubiesMeshes,
-      camera
+      camera,
     );
     const userRotation: UserRotation = {
       // ex. 'f' is clockwise, 'F' is counter-clockwise

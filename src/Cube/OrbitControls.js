@@ -150,7 +150,7 @@ class OrbitControls extends THREE.EventDispatcher {
       // so camera.up is the orbit axis
       const quat = new THREE.Quaternion().setFromUnitVectors(
         object.up,
-        new THREE.Vector3(0, 1, 0)
+        new THREE.Vector3(0, 1, 0),
       );
       const quatInverse = quat.clone().invert();
 
@@ -207,7 +207,7 @@ class OrbitControls extends THREE.EventDispatcher {
         // restrict phi to be between desired limits
         spherical.phi = Math.max(
           scope.minPolarAngle,
-          Math.min(scope.maxPolarAngle, spherical.phi)
+          Math.min(scope.maxPolarAngle, spherical.phi),
         );
 
         spherical.makeSafe();
@@ -217,7 +217,7 @@ class OrbitControls extends THREE.EventDispatcher {
         // restrict radius to be between desired limits
         spherical.radius = Math.max(
           scope.minDistance,
-          Math.min(scope.maxDistance, spherical.radius)
+          Math.min(scope.maxDistance, spherical.radius),
         );
 
         // move target to panned location
@@ -392,17 +392,17 @@ class OrbitControls extends THREE.EventDispatcher {
 
           // half of the fov is center to top of screen
           targetDistance *= Math.tan(
-            ((scope.object.fov / 2) * Math.PI) / 180.0
+            ((scope.object.fov / 2) * Math.PI) / 180.0,
           );
 
           // we use only clientHeight here so aspect ratio does not distort speed
           panLeft(
             (2 * deltaX * targetDistance) / element.clientHeight,
-            scope.object.matrix
+            scope.object.matrix,
           );
           panUp(
             (2 * deltaY * targetDistance) / element.clientHeight,
-            scope.object.matrix
+            scope.object.matrix,
           );
         } else if (scope.object.isOrthographicCamera) {
           // orthographic
@@ -410,18 +410,18 @@ class OrbitControls extends THREE.EventDispatcher {
             (deltaX * (scope.object.right - scope.object.left)) /
               scope.object.zoom /
               element.clientWidth,
-            scope.object.matrix
+            scope.object.matrix,
           );
           panUp(
             (deltaY * (scope.object.top - scope.object.bottom)) /
               scope.object.zoom /
               element.clientHeight,
-            scope.object.matrix
+            scope.object.matrix,
           );
         } else {
           // camera neither orthographic nor perspective
           console.warn(
-            "WARNING: OrbitControls.js encountered an unknown camera type - pan disabled."
+            "WARNING: OrbitControls.js encountered an unknown camera type - pan disabled.",
           );
           scope.enablePan = false;
         }
@@ -434,13 +434,13 @@ class OrbitControls extends THREE.EventDispatcher {
       } else if (scope.object.isOrthographicCamera) {
         scope.object.zoom = Math.max(
           scope.minZoom,
-          Math.min(scope.maxZoom, scope.object.zoom * dollyScale)
+          Math.min(scope.maxZoom, scope.object.zoom * dollyScale),
         );
         scope.object.updateProjectionMatrix();
         zoomChanged = true;
       } else {
         console.warn(
-          "WARNING: OrbitControls.js encountered an unknown camera type - dolly/zoom disabled."
+          "WARNING: OrbitControls.js encountered an unknown camera type - dolly/zoom disabled.",
         );
         scope.enableZoom = false;
       }
@@ -452,13 +452,13 @@ class OrbitControls extends THREE.EventDispatcher {
       } else if (scope.object.isOrthographicCamera) {
         scope.object.zoom = Math.max(
           scope.minZoom,
-          Math.min(scope.maxZoom, scope.object.zoom / dollyScale)
+          Math.min(scope.maxZoom, scope.object.zoom / dollyScale),
         );
         scope.object.updateProjectionMatrix();
         zoomChanged = true;
       } else {
         console.warn(
-          "WARNING: OrbitControls.js encountered an unknown camera type - dolly/zoom disabled."
+          "WARNING: OrbitControls.js encountered an unknown camera type - dolly/zoom disabled.",
         );
         scope.enableZoom = false;
       }
@@ -543,7 +543,7 @@ class OrbitControls extends THREE.EventDispatcher {
         case scope.keys.UP:
           if (event.ctrlKey || event.metaKey || event.shiftKey) {
             rotateUp(
-              (2 * Math.PI * scope.rotateSpeed) / scope.domElement.clientHeight
+              (2 * Math.PI * scope.rotateSpeed) / scope.domElement.clientHeight,
             );
           } else {
             pan(0, scope.keyPanSpeed);
@@ -555,7 +555,8 @@ class OrbitControls extends THREE.EventDispatcher {
         case scope.keys.BOTTOM:
           if (event.ctrlKey || event.metaKey || event.shiftKey) {
             rotateUp(
-              (-2 * Math.PI * scope.rotateSpeed) / scope.domElement.clientHeight
+              (-2 * Math.PI * scope.rotateSpeed) /
+                scope.domElement.clientHeight,
             );
           } else {
             pan(0, -scope.keyPanSpeed);
@@ -567,7 +568,7 @@ class OrbitControls extends THREE.EventDispatcher {
         case scope.keys.LEFT:
           if (event.ctrlKey || event.metaKey || event.shiftKey) {
             rotateLeft(
-              (2 * Math.PI * scope.rotateSpeed) / scope.domElement.clientHeight
+              (2 * Math.PI * scope.rotateSpeed) / scope.domElement.clientHeight,
             );
           } else {
             pan(scope.keyPanSpeed, 0);
@@ -579,7 +580,8 @@ class OrbitControls extends THREE.EventDispatcher {
         case scope.keys.RIGHT:
           if (event.ctrlKey || event.metaKey || event.shiftKey) {
             rotateLeft(
-              (-2 * Math.PI * scope.rotateSpeed) / scope.domElement.clientHeight
+              (-2 * Math.PI * scope.rotateSpeed) /
+                scope.domElement.clientHeight,
             );
           } else {
             pan(-scope.keyPanSpeed, 0);
