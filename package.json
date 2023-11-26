@@ -9,10 +9,10 @@
   },
   "scripts": {
     "build": "esbuild src/main.ts --bundle --minify --outfile=public/out.js",
-    "dev": "node dev.js",
+    "dev": "esbuild src/main.ts --outfile=public/out.js --bundle --watch",
     "prettier:check": "prettier --check '**/*.{ts,tsx,js,jsx,css,md,json}'",
     "prettier:write": "prettier --write '**/*.{ts,tsx,js,jsx,css,md,json}'",
-    "start": "node dev.js"
+    "start": "esbuild src/main.ts --outfile=public/out.js --bundle --watch"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged"
@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@types/three": "~0.154.0",
-    "esbuild": "^0.16.17",
+    "esbuild": "^0.19.7",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
     "simple-git-hooks": "^2.8.1",
