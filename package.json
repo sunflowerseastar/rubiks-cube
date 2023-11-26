@@ -23,10 +23,10 @@
     ]
   },
   "dependencies": {
-    "three": "~0.143.0"
+    "three": "~0.154.0"
   },
   "devDependencies": {
-    "@types/three": "~0.143.0",
+    "@types/three": "~0.154.0",
     "esbuild": "^0.16.17",
     "lint-staged": "^13.0.3",
     "prettier": "^2.7.1",
